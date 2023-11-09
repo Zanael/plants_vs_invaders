@@ -1,0 +1,4 @@
+enum SunType {
+  clean,
+  clouds,
+}

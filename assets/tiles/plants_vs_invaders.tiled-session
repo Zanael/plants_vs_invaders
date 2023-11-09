@@ -1,0 +1,46 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "level.tmx",
+    "expandedProjectPaths": [
+        "."
+    ],
+    "fileStates": {
+        "images.tsx": {
+            "dynamicWrapping": true,
+            "scaleInDock": 0.2198,
+            "scaleInEditor": 0.5736
+        },
+        "level.tmx": {
+            "scale": 0.7395,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 592.9682217714673,
+                "y": 481.4063556457065
+            }
+        },
+        "level_background.tsx": {
+            "dynamicWrapping": false,
+            "scaleInDock": 0.2001,
+            "scaleInEditor": 0.686
+        }
+    },
+    "last.imagePath": "/Users/zanael/GitHub/plants_vs_invaders/assets/images/levels/background",
+    "map.height": 26,
+    "map.lastUsedFormat": "tmx",
+    "map.width": 35,
+    "openFiles": [
+        "level.tmx"
+    ],
+    "project": "plants_vs_invaders.tiled-project",
+    "property.type": "int",
+    "recentFiles": [
+        "images.tsx",
+        "level_background.tsx",
+        "level.tmx"
+    ],
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.type": 1
+}
