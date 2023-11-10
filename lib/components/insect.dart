@@ -8,10 +8,12 @@ import 'package:plants_vs_invaders/animation_state_types/insect_animation_state_
 import 'package:plants_vs_invaders/animation_state_types/player_action_type.dart';
 import 'package:plants_vs_invaders/animation_state_types/player_animation_state_type.dart';
 import 'package:plants_vs_invaders/animation_state_types/player_direction.dart';
+import 'package:plants_vs_invaders/animation_state_types/spell_type.dart';
 import 'package:plants_vs_invaders/components/character_bar.dart';
 import 'package:plants_vs_invaders/components/collision_block.dart';
 import 'package:plants_vs_invaders/components/end_game_block.dart';
 import 'package:plants_vs_invaders/components/insects_types.dart';
+import 'package:plants_vs_invaders/components/plane_cloud.dart';
 import 'package:plants_vs_invaders/components/plant_defender.dart';
 import 'package:plants_vs_invaders/components/sprite_frame.dart';
 import 'package:plants_vs_invaders/components/utils.dart';
@@ -54,6 +56,8 @@ class Insect extends SpriteAnimationGroupComponent with HasGameRef<PlantsVsInvad
   double accumulatedTime = 0;
 
   late TimerComponent attackTimer;
+
+  bool isInCloud = false;
 
   @override
   FutureOr<void> onLoad() {
@@ -182,6 +186,24 @@ class Insect extends SpriteAnimationGroupComponent with HasGameRef<PlantsVsInvad
         add(attackTimer);
       }
     }
+    if (other is PlaneCloud) {
+      if (!isInCloud) {
+        isInCloud = true;
+        switch (other.spellType) {
+          case SpellType.circleBluePotion:
+            applyCircleBluePotion();
+            break;
+          case SpellType.circleYellowPotion:
+            applyCircleYellowPotion();
+            break;
+          case SpellType.circleRedPotion:
+            applyCircleRedPotion();
+            break;
+          default:
+            break;
+        }
+      }
+    }
     super.onCollision(intersectionPoints, other);
   }
 
@@ -191,6 +213,9 @@ class Insect extends SpriteAnimationGroupComponent with HasGameRef<PlantsVsInvad
     if (other is PlantDefender) {
       attackPlant = false;
       attackTimer.removeFromParent();
+    }
+    if (other is PlaneCloud) {
+      isInCloud = false;
     }
     super.onCollisionEnd(other);
   }
@@ -209,5 +234,17 @@ class Insect extends SpriteAnimationGroupComponent with HasGameRef<PlantsVsInvad
       _updateAnimationStateType();
       Future.delayed(canMoveDuration, () => gotHit = false);
     });
+  }
+
+  void applyCircleBluePotion() {
+    moveSpeed -= 20;
+  }
+
+  void applyCircleYellowPotion() {
+
+  }
+
+  void applyCircleRedPotion() {
+    removeFromParent();
   }
 }

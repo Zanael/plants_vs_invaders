@@ -1,0 +1,3 @@
+enum PlaneAnimationStateType {
+  idle,
+}

@@ -1,10 +1,10 @@
 import 'dart:async';
-import 'dart:math';
-import 'dart:ui';
 
 import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame_tiled/flame_tiled.dart';
+import 'package:plants_vs_invaders/animation_state_types/spell_type.dart';
 import 'package:plants_vs_invaders/components/collision_block.dart';
 import 'package:plants_vs_invaders/components/end_game_block.dart';
 import 'package:plants_vs_invaders/components/energy_card.dart';
@@ -16,6 +16,8 @@ import 'package:plants_vs_invaders/components/insect.dart';
 import 'package:plants_vs_invaders/components/insects_types.dart';
 import 'package:plants_vs_invaders/components/insects_spawn_timer.dart';
 import 'package:plants_vs_invaders/components/menu_button.dart';
+import 'package:plants_vs_invaders/components/plane_air_force.dart';
+import 'package:plants_vs_invaders/components/plane_cloud.dart';
 import 'package:plants_vs_invaders/components/plant.dart';
 import 'package:plants_vs_invaders/components/plant_defender.dart';
 import 'package:plants_vs_invaders/components/plant_defender_type.dart';
@@ -25,6 +27,7 @@ import 'package:plants_vs_invaders/components/plant_weeds_spawn_timer.dart';
 import 'package:plants_vs_invaders/components/plants_base_type.dart';
 import 'package:plants_vs_invaders/components/player.dart';
 import 'package:plants_vs_invaders/components/score_table.dart';
+import 'package:plants_vs_invaders/components/spell_book.dart';
 import 'package:plants_vs_invaders/components/sprite_frame.dart';
 import 'package:plants_vs_invaders/components/sun.dart';
 import 'package:plants_vs_invaders/components/sun_card.dart';
@@ -35,7 +38,7 @@ import 'package:plants_vs_invaders/components/sun_type.dart';
 import 'package:plants_vs_invaders/components/wind_generator.dart';
 import 'package:plants_vs_invaders/plants_vs_invaders.dart';
 
-class Level extends World with HasGameRef<PlantsVsInvaders> {
+class Level extends World with HasGameRef<PlantsVsInvaders>, TapCallbacks {
   late Player player;
   late SpriteComponent backgroundImage;
   late TiledComponent tiledLevel;
@@ -108,8 +111,15 @@ class Level extends World with HasGameRef<PlantsVsInvaders> {
   late final EndGameBlock endGameBlock;
   late final InsectsSpawnTimer insectsSpawnTimer;
   late final PlantWeedsSpawnTimer plantWeedsSpawnTimer;
+  late final Timer victoryTimer;
+  late final double victoryTimerSeconds = 60;
+  SpellBook? spellBook;
+  SpellType? selectedSpellType;
 
   bool isGameOver = false;
+
+  double fixedDeltaTime = 1 / 60;
+  double accumulatedTime = 0;
 
   Level({
     required this.levelNumber,
@@ -140,6 +150,7 @@ class Level extends World with HasGameRef<PlantsVsInvaders> {
 
     _addInsectsSpawnTimer();
     _addPlantWeedsSpawnTimer();
+    _addVictoryTimer();
 
     add(TimerComponent(
         period: 5,
@@ -147,9 +158,26 @@ class Level extends World with HasGameRef<PlantsVsInvaders> {
         autoStart: true,
         onTick: () {
           _updateSunResources();
+          _updateEnergyResources();
         }));
 
     return super.onLoad();
+  }
+
+  @override
+  void update(double dt) {
+    accumulatedTime += dt;
+
+    while (accumulatedTime >= fixedDeltaTime) {
+      victoryTimer.update(fixedDeltaTime);
+      if (victoryTimer.finished) {
+        gameOver(GameOverType.victory);
+      }
+
+      accumulatedTime -= fixedDeltaTime;
+    }
+
+    super.update(dt);
   }
 
   void _loadBackgroundImage() {
@@ -380,7 +408,6 @@ class Level extends World with HasGameRef<PlantsVsInvaders> {
 
   void _addSunCards() {
     for (int i = 0; i < plantDefenderTypes.length; i++) {
-
       int cost = 0;
       switch (plantDefenderTypes[i]) {
         case PlantDefenderType.peas:
@@ -403,6 +430,8 @@ class Level extends World with HasGameRef<PlantsVsInvaders> {
         position: sunCardSpawnPoints[i].position,
         size: sunCardSpawnPoints[i].size,
         checkNewPlantPosition: (plantDefenderType, position) {
+          if (sunResourcesCount - cost < 0) return;
+
           for (int rowIndex = 0; rowIndex < boardMapSpawnPoint.length; rowIndex++) {
             for (int columnIndex = 0; columnIndex < boardMapSpawnPoint[rowIndex].length; columnIndex++) {
               if (Rect.fromLTWH(
@@ -442,6 +471,10 @@ class Level extends World with HasGameRef<PlantsVsInvaders> {
       price: planeCost,
       position: energyCardSpawnPoints[0].position,
       size: energyCardSpawnPoints[0].size,
+      callback: (price) {
+        if (energyResourcesCount - price < 0) return;
+        _openSpellBook();
+      },
     );
     energyCards.add(energyCard);
     add(energyCard);
@@ -528,7 +561,11 @@ class Level extends World with HasGameRef<PlantsVsInvaders> {
   }
 
   void _updateSunResources() {
-    if (sunResources != null) remove(sunResources!);
+    if (sunResources != null) {
+      if (sunResources!.parent != null) {
+        remove(sunResources!);
+      }
+    }
     sunResources = null;
     sunResources = SunResources(
       position: sunResourceSpawnPoint.position,
@@ -538,7 +575,11 @@ class Level extends World with HasGameRef<PlantsVsInvaders> {
   }
 
   void _updateEnergyResources() {
-    if (energyResources != null) remove(energyResources!);
+    if (energyResources != null) {
+      if (energyResources!.parent != null) {
+        remove(energyResources!);
+      }
+    }
     energyResources = null;
     energyResources = EnergyResources(
       position: windResourceSpawnPoint.position,
@@ -589,6 +630,10 @@ class Level extends World with HasGameRef<PlantsVsInvaders> {
     add(plantWeedsSpawnTimer);
   }
 
+  void _addVictoryTimer() {
+    victoryTimer = Timer(victoryTimerSeconds);
+  }
+
   void gameOver(GameOverType gameOverType) {
     if (!isGameOver) {
       isGameOver = true;
@@ -621,5 +666,92 @@ class Level extends World with HasGameRef<PlantsVsInvaders> {
   void payEnergyResources(int count) {
     energyResourcesCount -= count;
     _updateScoreTable();
+  }
+
+  void _openSpellBook() {
+    if (spellBook != null) {
+      if (spellBook!.parent != null) {
+        remove(spellBook!);
+      }
+    }
+
+    spellBook = null;
+    spellBook = SpellBook(
+      position: Vector2(248, 181),
+      onCircleBluePotion: () {
+        _closeSpellBook();
+        selectedSpellType = SpellType.circleBluePotion;
+      },
+      onCircleYellowPotion: () {
+        _closeSpellBook();
+        selectedSpellType = SpellType.circleYellowPotion;
+      },
+      onCircleRedPotion: () {
+        _closeSpellBook();
+        selectedSpellType = SpellType.circleRedPotion;
+      },
+      onRectBluePotion: () {
+        _closeSpellBook();
+        selectedSpellType = SpellType.rectRedPotion;
+      },
+      onRectYellowPotion: () {
+        _closeSpellBook();
+        selectedSpellType = SpellType.rectYellowPotion;
+      },
+      onRectRedPotion: () {
+        _closeSpellBook();
+        selectedSpellType = SpellType.rectRedPotion;
+      },
+      onClose: () => _closeSpellBook(),
+    );
+    add(spellBook!);
+  }
+
+  _closeSpellBook() {
+    if (spellBook != null) {
+      if (spellBook!.parent != null) {
+        remove(spellBook!);
+        spellBook = null;
+      }
+    }
+  }
+
+  @override
+  void onTapUp(TapUpEvent event) {
+    if (selectedSpellType != null) {
+      for (int rowIndex = 0; rowIndex < boardMapSpawnPoint.length; rowIndex++) {
+        for (int columnIndex = 0; columnIndex < boardMapSpawnPoint[rowIndex].length; columnIndex++) {
+          if (Rect.fromLTWH(
+            boardMapSpawnPoint[rowIndex][columnIndex].position.x,
+            boardMapSpawnPoint[rowIndex][columnIndex].position.y,
+            boardMapSpawnPoint[rowIndex][columnIndex].size.x,
+            boardMapSpawnPoint[rowIndex][columnIndex].size.y,
+          ).containsPoint(event.localPosition)) {
+            final plane = PlaneAirForce(
+                position: Vector2(
+                  planeSpawnPoints[rowIndex].position.x,
+                  planeSpawnPoints[rowIndex].position.y,
+                ));
+            add(plane);
+
+            final planeCloud = PlaneCloud(
+              position: Vector2(
+                boardMapSpawnPoint[rowIndex][columnIndex].position.x + 20,
+                boardMapSpawnPoint[rowIndex][columnIndex].position.y + 30,
+              ),
+              size: Vector2(70, 80),
+              spellType: selectedSpellType!,
+              onClose: () {},
+            );
+            add(planeCloud);
+            payEnergyResources(100);
+
+            break;
+          }
+        }
+      }
+      selectedSpellType = null;
+    }
+    super.onTapUp(event);
   }
 }

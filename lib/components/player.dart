@@ -10,10 +10,10 @@ import 'package:plants_vs_invaders/animation_state_types/player_direction.dart';
 import 'package:plants_vs_invaders/components/character_bar.dart';
 import 'package:plants_vs_invaders/components/collision_block.dart';
 import 'package:plants_vs_invaders/components/energy_resources.dart';
+import 'package:plants_vs_invaders/components/insect.dart';
+import 'package:plants_vs_invaders/components/plant_defender.dart';
 import 'package:plants_vs_invaders/components/plant_weed.dart';
-import 'package:plants_vs_invaders/components/sprite_frame.dart';
 import 'package:plants_vs_invaders/components/sun_resources.dart';
-import 'package:plants_vs_invaders/components/utils.dart';
 import 'package:plants_vs_invaders/level.dart';
 import 'package:plants_vs_invaders/plants_vs_invaders.dart';
 
@@ -78,15 +78,18 @@ class Player extends SpriteAnimationGroupComponent
   bool isCollide = false;
   PlayerDirection collideDirection = PlayerDirection.right;
 
-  final int damage = 20;
+  final int damageCount = 20;
+  final int healCount = 20;
 
   PlantWeed? targetWeedPlant;
+  PlantDefender? targetDefenderPlant;
+  Insect? targetInsect;
 
   @override
   FutureOr<void> onLoad() {
     priority = 1000;
     _loadAllAnimations();
-    _addCharacterBar();
+    // _addCharacterBar();
     startingPosition = Vector2(position.x, position.y);
     add(RectangleHitbox());
 
@@ -125,7 +128,11 @@ class Player extends SpriteAnimationGroupComponent
 
     isSpaceKeyPressed = keysPressed.contains(LogicalKeyboardKey.space);
 
-    if (isSpaceKeyPressed) targetWeedPlant?.hit(damage);
+    if (isSpaceKeyPressed) {
+      targetWeedPlant?.hit(damageCount);
+      targetInsect?.hit(damageCount);
+      targetDefenderPlant?.heal(healCount);
+    }
 
     horizontalMovement += isLeftKeyPressed ? -1 : 0;
     horizontalMovement += isRightKeyPressed ? 1 : 0;
@@ -328,6 +335,14 @@ class Player extends SpriteAnimationGroupComponent
       playerActionType = PlayerActionType.attackPlants;
       targetWeedPlant = other;
     }
+    if (other is PlantDefender) {
+      playerActionType = PlayerActionType.heal;
+      targetDefenderPlant = other;
+    }
+    if (other is Insect) {
+      playerActionType = PlayerActionType.attackInsects;
+      targetInsect = other;
+    }
     if (other is SunResources) {
       other.removeFromParent();
       level.collectSunResources(50);
@@ -341,10 +356,17 @@ class Player extends SpriteAnimationGroupComponent
 
   @override
   void onCollisionEnd(PositionComponent other) {
-    if (other is CollisionBlock) {}
-    if (other is CollisionBlock) {
+    if (other is PlantWeed) {
       playerActionType = PlayerActionType.heal;
       targetWeedPlant = null;
+    }
+    if (other is PlantWeed) {
+      playerActionType = PlayerActionType.heal;
+      targetDefenderPlant = null;
+    }
+    if (other is Insect) {
+      playerActionType = PlayerActionType.heal;
+      targetInsect = null;
     }
     super.onCollisionEnd(other);
   }

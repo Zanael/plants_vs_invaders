@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flame/components.dart';
-import 'package:plants_vs_invaders/components/insects_types.dart';
 import 'package:plants_vs_invaders/components/plant_weed_type.dart';
 import 'package:plants_vs_invaders/level.dart';
 
@@ -12,7 +11,7 @@ class PlantWeedsSpawnTimer extends TimerComponent {
   PlantWeedsSpawnTimer({
     required this.level,
   }) : super(
-    period: 4,
+    period: 3,
     repeat: true,
   );
 

@@ -68,6 +68,8 @@ flutter:
   #
   assets:
     - assets/tiles/
+    - assets/images/
+    - assets/images/level_preview/
     - assets/images/levels/background/
     - assets/images/levels/fields/
     - assets/images/levels/score_table/
@@ -106,6 +108,11 @@ flutter:
     - assets/images/levels/bullets/clover/
     - assets/images/levels/bullets/oats/
     - assets/images/levels/bullets/peas/
+    - assets/images/levels/plane/
+    - assets/images/levels/plane_cloud/
+    - assets/images/levels/spell_book/
+    - assets/images/levels/potions/circle/
+    - assets/images/levels/potions/rect/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

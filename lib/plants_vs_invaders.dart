@@ -5,6 +5,10 @@ import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/painting.dart';
 import 'package:plants_vs_invaders/level.dart';
+import 'package:plants_vs_invaders/levels/level_preview_carrot.dart';
+import 'package:plants_vs_invaders/levels/level_preview_potato.dart';
+import 'package:plants_vs_invaders/levels/levels_map.dart';
+import 'package:plants_vs_invaders/levels/main_menu.dart';
 
 class PlantsVsInvaders extends FlameGame with HasKeyboardHandlerComponents, HasCollisionDetection {
   @override
@@ -15,9 +19,9 @@ class PlantsVsInvaders extends FlameGame with HasKeyboardHandlerComponents, HasC
   @override
   FutureOr<void> onLoad() async {
     await _initialize();
-    _loadLevel(levelNumber: 1);
-    _prepareCamera();
-    _assembly();
+
+    // reloadLevel1();
+    reloadMainMenu();
 
     return super.onLoad();
   }
@@ -46,8 +50,38 @@ class PlantsVsInvaders extends FlameGame with HasKeyboardHandlerComponents, HasC
     ]);
   }
 
-  void reloadLevel() {
+  void reloadLevelPotato() {
     _loadLevel(levelNumber: 1);
+    _prepareCamera();
+    _assembly();
+  }
+
+  void reloadLevelCarrot() {
+    _loadLevel(levelNumber: 1);
+    _prepareCamera();
+    _assembly();
+  }
+
+  void reloadMainMenu() {
+    _currentLevel = MainMenu();
+    _prepareCamera();
+    _assembly();
+  }
+
+  void reloadLevelsMap() {
+    _currentLevel = LevelsMap();
+    _prepareCamera();
+    _assembly();
+  }
+
+  void reloadLevelPreviewPotato() {
+    _currentLevel = LevelPreviewPotato();
+    _prepareCamera();
+    _assembly();
+  }
+
+  void reloadLevelPreviewCarrot() {
+    _currentLevel = LevelPreviewCarrot();
     _prepareCamera();
     _assembly();
   }

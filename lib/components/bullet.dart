@@ -24,6 +24,7 @@ class Bullet extends SpriteAnimationGroupComponent with HasGameRef<PlantsVsInvad
   Bullet({
     required this.plantDefenderType,
     required this.damage,
+    required this.moveSpeed,
     required position,
     // required size,
   }) : super(
@@ -109,6 +110,10 @@ class Bullet extends SpriteAnimationGroupComponent with HasGameRef<PlantsVsInvad
   void _updateMovement(double dt) {
     velocity.x = horizontalMovement * moveSpeed;
     position.x += velocity.x * dt;
+
+    if (position.x > game.camera.viewport.size.x) {
+      removeFromParent();
+    }
   }
 
   @override

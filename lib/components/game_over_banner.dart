@@ -53,6 +53,6 @@ class GameOverBanner extends PositionComponent with HasGameRef<PlantsVsInvaders>
 
     add(textComponent);
 
-    Future.delayed(const Duration(seconds: 3), () => game.reloadLevel());
+    Future.delayed(const Duration(seconds: 5), () => game.reloadLevelsMap());
   }
 }

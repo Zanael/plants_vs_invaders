@@ -3,6 +3,9 @@ import 'dart:async';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/services.dart';
+import 'package:plants_vs_invaders/animation_state_types/bullet_damage.dart';
+import 'package:plants_vs_invaders/animation_state_types/bullet_interval.dart';
+import 'package:plants_vs_invaders/animation_state_types/bullet_speed.dart';
 import 'package:plants_vs_invaders/animation_state_types/character_bar_colors.dart';
 import 'package:plants_vs_invaders/animation_state_types/insect_animation_state_type.dart';
 import 'package:plants_vs_invaders/animation_state_types/plant_animation_state_type.dart';
@@ -61,13 +64,14 @@ class PlantDefender extends Plant with HasGameRef<PlantsVsInvaders>, CollisionCa
     plantPosition.y = position.y;
 
     add(TimerComponent(
-        period: 2,
+        period: BulletInterval.interval(plantDefenderType),
         repeat: true,
         autoStart: true,
         onTick: () {
           level.add(Bullet(
             plantDefenderType: plantDefenderType,
-            damage: 15,
+            damage: BulletDamage.damage(plantDefenderType),
+            moveSpeed: BulletSpeed.speed(plantDefenderType),
             position: Vector2(
               plantPosition.x + 45,
               plantPosition.y + 25,
@@ -193,4 +197,16 @@ class PlantDefender extends Plant with HasGameRef<PlantsVsInvaders>, CollisionCa
       Future.delayed(canMoveDuration, () => gotHit = false);
     });
   }
+
+  void heal(int heal) {
+    health += heal;
+    if (health > totalHealth) health = 100;
+    _updateCharacterBar();
+  }
+
+  void applyCircleBluePotion() {}
+
+  void applyCircleYellowPotion() {}
+
+  void applyCircleRedPotion() {}
 }
