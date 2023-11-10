@@ -1,4 +1,4 @@
-enum PlantWeedsType {
+enum PlantWeedType {
   bindweed,
   dandelion,
   hogweed,

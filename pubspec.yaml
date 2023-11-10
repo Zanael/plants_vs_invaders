@@ -78,6 +78,34 @@ flutter:
     - assets/images/levels/sun_generator/
     - assets/images/levels/wind_generator/
     - assets/images/levels/resources/
+    - assets/images/levels/player/idle/
+    - assets/images/levels/player/run/
+    - assets/images/levels/player/heal/
+    - assets/images/levels/player/attack/insects/
+    - assets/images/levels/player/attack/plants/
+    - assets/images/levels/insects/colorado_beetle/
+    - assets/images/levels/insects/mole/
+    - assets/images/levels/insects/mole_cricket/
+    - assets/images/levels/insects/slug/
+    - assets/images/levels/plants/base/beet/
+    - assets/images/levels/plants/base/cabbage/
+    - assets/images/levels/plants/base/carrot/
+    - assets/images/levels/plants/base/corn/
+    - assets/images/levels/plants/base/potato/
+    - assets/images/levels/plants/base/wheat/
+    - assets/images/levels/plants/defenders/buckwheat/
+    - assets/images/levels/plants/defenders/clover/
+    - assets/images/levels/plants/defenders/oats/
+    - assets/images/levels/plants/defenders/peas/
+    - assets/images/levels/plants/weeds/bindweed/
+    - assets/images/levels/plants/weeds/dandelion/
+    - assets/images/levels/plants/weeds/hogweed/
+    - assets/images/levels/plants/weeds/shepherds_purse/
+    - assets/images/levels/plants/weeds/wheatgrass/
+    - assets/images/levels/bullets/buckwheat/
+    - assets/images/levels/bullets/clover/
+    - assets/images/levels/bullets/oats/
+    - assets/images/levels/bullets/peas/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

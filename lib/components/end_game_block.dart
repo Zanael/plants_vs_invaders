@@ -2,11 +2,9 @@ import 'dart:async';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:plants_vs_invaders/plants_vs_invaders.dart';
 
-class EnergyResources extends SpriteComponent with HasGameRef<PlantsVsInvaders> {
-
-  EnergyResources({
+class EndGameBlock extends PositionComponent {
+  EndGameBlock({
     required position,
     required size,
   }) : super(
@@ -16,7 +14,6 @@ class EnergyResources extends SpriteComponent with HasGameRef<PlantsVsInvaders> 
 
   @override
   FutureOr<void> onLoad() {
-    sprite = Sprite(game.images.fromCache('levels/resources/energy.png'));
     add(RectangleHitbox());
     return super.onLoad();
   }

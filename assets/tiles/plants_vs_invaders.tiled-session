@@ -14,11 +14,15 @@
             "scaleInEditor": 0.5736
         },
         "level.tmx": {
-            "scale": 0.7395,
-            "selectedLayer": 0,
+            "expandedGroupLayers": [
+                10,
+                9
+            ],
+            "scale": 0.764,
+            "selectedLayer": 17,
             "viewCenter": {
-                "x": 592.9682217714673,
-                "y": 481.4063556457065
+                "x": 435.86387434554973,
+                "y": 527.4869109947643
             }
         },
         "level_background.tsx": {
@@ -37,9 +41,9 @@
     "project": "plants_vs_invaders.tiled-project",
     "property.type": "int",
     "recentFiles": [
+        "level.tmx",
         "images.tsx",
-        "level_background.tsx",
-        "level.tmx"
+        "level_background.tsx"
     ],
     "tileset.lastUsedFormat": "tsx",
     "tileset.type": 1

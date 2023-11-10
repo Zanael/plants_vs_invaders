@@ -49,7 +49,7 @@ class ScoreTable extends SpriteComponent with HasGameRef<PlantsVsInvaders> {
     );
 
     final energyTextComponent = TextComponent(
-      text: sunResources.toString(),
+      text: energyResources.toString(),
       textRenderer: energyTextStyle,
       anchor: Anchor.topLeft,
       position: Vector2(69, 58),

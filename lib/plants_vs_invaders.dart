@@ -1,11 +1,12 @@
 import 'dart:async';
 
 import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/painting.dart';
 import 'package:plants_vs_invaders/level.dart';
 
-class PlantsVsInvaders extends FlameGame{
+class PlantsVsInvaders extends FlameGame with HasKeyboardHandlerComponents, HasCollisionDetection {
   @override
   Color backgroundColor() => const Color(0xFF211F30);
   late CameraComponent _camera;
@@ -43,5 +44,11 @@ class PlantsVsInvaders extends FlameGame{
       _camera,
       _currentLevel,
     ]);
+  }
+
+  void reloadLevel() {
+    _loadLevel(levelNumber: 1);
+    _prepareCamera();
+    _assembly();
   }
 }

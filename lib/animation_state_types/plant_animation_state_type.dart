@@ -1,0 +1,4 @@
+enum PlantAnimationStateType {
+  idle,
+  hit,
+}

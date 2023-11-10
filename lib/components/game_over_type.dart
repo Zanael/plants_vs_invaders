@@ -1,0 +1,4 @@
+enum GameOverType {
+  victory,
+  defeat,
+}

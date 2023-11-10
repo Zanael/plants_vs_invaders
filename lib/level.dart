@@ -1,17 +1,34 @@
 import 'dart:async';
+import 'dart:math';
+import 'dart:ui';
 
 import 'package:flame/components.dart';
+import 'package:flame/extensions.dart';
 import 'package:flame_tiled/flame_tiled.dart';
+import 'package:plants_vs_invaders/components/collision_block.dart';
+import 'package:plants_vs_invaders/components/end_game_block.dart';
 import 'package:plants_vs_invaders/components/energy_card.dart';
 import 'package:plants_vs_invaders/components/energy_resources.dart';
 import 'package:plants_vs_invaders/components/field.dart';
+import 'package:plants_vs_invaders/components/game_over_banner.dart';
+import 'package:plants_vs_invaders/components/game_over_type.dart';
+import 'package:plants_vs_invaders/components/insect.dart';
+import 'package:plants_vs_invaders/components/insects_types.dart';
+import 'package:plants_vs_invaders/components/insects_spawn_timer.dart';
 import 'package:plants_vs_invaders/components/menu_button.dart';
-import 'package:plants_vs_invaders/components/plants_base.dart';
-import 'package:plants_vs_invaders/components/plants_defenders.dart';
+import 'package:plants_vs_invaders/components/plant.dart';
+import 'package:plants_vs_invaders/components/plant_defender.dart';
+import 'package:plants_vs_invaders/components/plant_defender_type.dart';
+import 'package:plants_vs_invaders/components/plant_weed.dart';
+import 'package:plants_vs_invaders/components/plant_weed_type.dart';
+import 'package:plants_vs_invaders/components/plant_weeds_spawn_timer.dart';
+import 'package:plants_vs_invaders/components/plants_base_type.dart';
+import 'package:plants_vs_invaders/components/player.dart';
 import 'package:plants_vs_invaders/components/score_table.dart';
 import 'package:plants_vs_invaders/components/sprite_frame.dart';
 import 'package:plants_vs_invaders/components/sun.dart';
 import 'package:plants_vs_invaders/components/sun_card.dart';
+import 'package:plants_vs_invaders/components/sun_card_cost.dart';
 import 'package:plants_vs_invaders/components/sun_generator.dart';
 import 'package:plants_vs_invaders/components/sun_resources.dart';
 import 'package:plants_vs_invaders/components/sun_type.dart';
@@ -19,15 +36,17 @@ import 'package:plants_vs_invaders/components/wind_generator.dart';
 import 'package:plants_vs_invaders/plants_vs_invaders.dart';
 
 class Level extends World with HasGameRef<PlantsVsInvaders> {
+  late Player player;
   late SpriteComponent backgroundImage;
   late TiledComponent tiledLevel;
   final int levelNumber;
   final int boardRows = 5;
   final int boardColumns = 9;
 
+  late final List<List<Plant?>> plantsBoard;
   late final List<List<SpriteFrame>> boardMapSpawnPoint;
   late final SpriteFrame playerSpawnPoint;
-  late final List<SpriteFrame> planeSpawnPoints = List<SpriteFrame>.generate(
+  final List<SpriteFrame> planeSpawnPoints = List<SpriteFrame>.generate(
     5,
     (index) => SpriteFrame(
       position: Vector2.zero(),
@@ -35,7 +54,7 @@ class Level extends World with HasGameRef<PlantsVsInvaders> {
     ),
   );
 
-  late final List<SpriteFrame> insectsSpawnPoints = List<SpriteFrame>.generate(
+  final List<SpriteFrame> insectsSpawnPoints = List<SpriteFrame>.generate(
     5,
     (index) => SpriteFrame(
       position: Vector2.zero(),
@@ -45,14 +64,14 @@ class Level extends World with HasGameRef<PlantsVsInvaders> {
   late final SpriteFrame scoreTableSpawnPoint;
   late final SpriteFrame menuButtonSpawnPoint;
   late final SpriteFrame fieldSpawnPoint;
-  late final List<SpriteFrame> sunCardSpawnPoints = List<SpriteFrame>.generate(
+  final List<SpriteFrame> sunCardSpawnPoints = List<SpriteFrame>.generate(
     4,
     (index) => SpriteFrame(
       position: Vector2.zero(),
       size: Vector2.zero(),
     ),
   );
-  late final List<SpriteFrame> energyCardSpawnPoints = List<SpriteFrame>.generate(
+  final List<SpriteFrame> energyCardSpawnPoints = List<SpriteFrame>.generate(
     1,
     (index) => SpriteFrame(
       position: Vector2.zero(),
@@ -70,17 +89,12 @@ class Level extends World with HasGameRef<PlantsVsInvaders> {
     PlantDefenderType.oats,
     PlantDefenderType.buckwheat,
   ];
-  final List<int> plantDefenderCost = [
-    100,
-    150,
-    200,
-  ];
-  late final List<SunCard> sunCards = [];
-  late final List<EnergyCard> energyCards = [];
+  final List<SunCard> sunCards = [];
+  final List<EnergyCard> energyCards = [];
   final planeCost = 100;
   int sunResourcesCount = 200;
   int energyResourcesCount = 100;
-  late final ScoreTable scoreTable;
+  late ScoreTable? scoreTable;
   late final MenuButton menuButton;
   late final Field field;
   final PlantBaseType fieldType = PlantBaseType.potato;
@@ -88,8 +102,14 @@ class Level extends World with HasGameRef<PlantsVsInvaders> {
   late final Sun sun;
   late final SunGenerator sunGenerator;
   late final WindGenerator windGenerator;
-  late final SunResources sunResources;
-  late final EnergyResources energyResources;
+  late SunResources? sunResources;
+  late EnergyResources? energyResources;
+  final List<CollisionBlock> collisionBlocks = [];
+  late final EndGameBlock endGameBlock;
+  late final InsectsSpawnTimer insectsSpawnTimer;
+  late final PlantWeedsSpawnTimer plantWeedsSpawnTimer;
+
+  bool isGameOver = false;
 
   Level({
     required this.levelNumber,
@@ -97,12 +117,14 @@ class Level extends World with HasGameRef<PlantsVsInvaders> {
 
   @override
   FutureOr<void> onLoad() async {
+    player = Player(level: this, position: Vector2.zero());
     _loadBackgroundImage();
     await _loadTiledLevel();
     _loadBoardMapPoints();
     _loadSpawnPoints();
     _loadInterfacePoints();
     _loadGameObjectsPoints();
+    _loadAndAddCollisionBlocks();
 
     _addSunCards();
     _addEnergyCards();
@@ -114,6 +136,18 @@ class Level extends World with HasGameRef<PlantsVsInvaders> {
     _addWindGenerator();
     _addSunResources();
     _addEnergyResources();
+    _addPlayer();
+
+    _addInsectsSpawnTimer();
+    _addPlantWeedsSpawnTimer();
+
+    add(TimerComponent(
+        period: 5,
+        repeat: true,
+        autoStart: true,
+        onTick: () {
+          _updateSunResources();
+        }));
 
     return super.onLoad();
   }
@@ -140,6 +174,15 @@ class Level extends World with HasGameRef<PlantsVsInvaders> {
                 ),
             growable: false),
         growable: false);
+    plantsBoard = List<List<Plant?>>.generate(
+      boardRows,
+      (index) => List<Plant?>.generate(
+        boardColumns,
+        (index) => null,
+        growable: false,
+      ),
+      growable: false,
+    );
   }
 
   void _loadBoardMapPoints() {
@@ -309,13 +352,85 @@ class Level extends World with HasGameRef<PlantsVsInvaders> {
     }
   }
 
+  void _loadAndAddCollisionBlocks() {
+    final collisionsLayer = tiledLevel.tileMap.getLayer<ObjectGroup>('collisions');
+
+    if (collisionsLayer != null) {
+      for (final collision in collisionsLayer.objects) {
+        final position = Vector2(collision.x, collision.y);
+        final size = Vector2(collision.width, collision.height);
+        if (collision.class_ == 'EndGame') {
+          final block = EndGameBlock(
+            position: position,
+            size: size,
+          );
+          endGameBlock = block;
+          add(endGameBlock);
+        } else {
+          final block = CollisionBlock(
+            position: position,
+            size: size,
+          );
+          collisionBlocks.add(block);
+          add(block);
+        }
+      }
+    }
+  }
+
   void _addSunCards() {
     for (int i = 0; i < plantDefenderTypes.length; i++) {
+
+      int cost = 0;
+      switch (plantDefenderTypes[i]) {
+        case PlantDefenderType.peas:
+          cost = SunCardCost.peas;
+          break;
+        case PlantDefenderType.oats:
+          cost = SunCardCost.oats;
+          break;
+        case PlantDefenderType.clover:
+          cost = SunCardCost.clover;
+          break;
+        case PlantDefenderType.buckwheat:
+          cost = SunCardCost.buckwheat;
+          break;
+      }
+
       final sunCard = SunCard(
         plantDefenderType: plantDefenderTypes[i],
-        price: plantDefenderCost[i],
+        price: cost,
         position: sunCardSpawnPoints[i].position,
         size: sunCardSpawnPoints[i].size,
+        checkNewPlantPosition: (plantDefenderType, position) {
+          for (int rowIndex = 0; rowIndex < boardMapSpawnPoint.length; rowIndex++) {
+            for (int columnIndex = 0; columnIndex < boardMapSpawnPoint[rowIndex].length; columnIndex++) {
+              if (Rect.fromLTWH(
+                boardMapSpawnPoint[rowIndex][columnIndex].position.x,
+                boardMapSpawnPoint[rowIndex][columnIndex].position.y,
+                boardMapSpawnPoint[rowIndex][columnIndex].size.x,
+                boardMapSpawnPoint[rowIndex][columnIndex].size.y,
+              ).containsPoint(position)) {
+                if (plantsBoard[rowIndex][columnIndex] == null) {
+                  PlantDefender plantDefender = PlantDefender(
+                    level: this,
+                    plantDefenderType: plantDefenderType,
+                    position: Vector2(
+                      boardMapSpawnPoint[rowIndex][columnIndex].position.x + 20,
+                      boardMapSpawnPoint[rowIndex][columnIndex].position.y + 30,
+                    ),
+                    size: Vector2(70, 80),
+                  );
+                  plantsBoard[rowIndex][columnIndex] = plantDefender;
+                  add(plantDefender);
+
+                  paySunResources(cost);
+                }
+                break;
+              }
+            }
+          }
+        },
       );
       sunCards.add(sunCard);
       add(sunCard);
@@ -339,7 +454,19 @@ class Level extends World with HasGameRef<PlantsVsInvaders> {
       position: scoreTableSpawnPoint.position,
       size: scoreTableSpawnPoint.size,
     );
-    add(scoreTable);
+    add(scoreTable!);
+  }
+
+  void _updateScoreTable() {
+    if (scoreTable != null) remove(scoreTable!);
+    scoreTable = null;
+    scoreTable = ScoreTable(
+      sunResources: sunResourcesCount,
+      energyResources: energyResourcesCount,
+      position: scoreTableSpawnPoint.position,
+      size: scoreTableSpawnPoint.size,
+    );
+    add(scoreTable!);
   }
 
   void _addMenuButton() {
@@ -389,7 +516,7 @@ class Level extends World with HasGameRef<PlantsVsInvaders> {
       position: sunResourceSpawnPoint.position,
       size: sunResourceSpawnPoint.size,
     );
-    add(sunResources);
+    add(sunResources!);
   }
 
   void _addEnergyResources() {
@@ -397,6 +524,102 @@ class Level extends World with HasGameRef<PlantsVsInvaders> {
       position: windResourceSpawnPoint.position,
       size: windResourceSpawnPoint.size,
     );
-    add(energyResources);
+    add(energyResources!);
+  }
+
+  void _updateSunResources() {
+    if (sunResources != null) remove(sunResources!);
+    sunResources = null;
+    sunResources = SunResources(
+      position: sunResourceSpawnPoint.position,
+      size: sunResourceSpawnPoint.size,
+    );
+    add(sunResources!);
+  }
+
+  void _updateEnergyResources() {
+    if (energyResources != null) remove(energyResources!);
+    energyResources = null;
+    energyResources = EnergyResources(
+      position: windResourceSpawnPoint.position,
+      size: windResourceSpawnPoint.size,
+    );
+    add(energyResources!);
+  }
+
+  void _addPlayer() {
+    player.position = playerSpawnPoint.position;
+    player.collisionBlocks = collisionBlocks;
+    add(player);
+  }
+
+  void spawnInsects({required InsectsTypes insectsType, required SpriteFrame spawnPoint}) {
+    Insect insect = Insect(
+        insectsType: insectsType,
+        position: spawnPoint.position,
+        size: spawnPoint.size,
+        endGameCallback: () {
+          gameOver(GameOverType.defeat);
+        });
+    add(insect);
+  }
+
+  void spawnWeeds(
+      {required PlantWeedType plantWeedType, required int spawnPointRowIndex, required int spawnPointColumnIndex}) {
+    final spawnPoint = boardMapSpawnPoint[spawnPointRowIndex][spawnPointColumnIndex];
+    PlantWeed plantWeed = PlantWeed(
+      plantWeedType: plantWeedType,
+      position: Vector2(
+        spawnPoint.position.x + 20,
+        spawnPoint.position.y + 30,
+      ),
+      size: Vector2(70, 80),
+    );
+    plantsBoard[spawnPointRowIndex][spawnPointColumnIndex] = plantWeed;
+    add(plantWeed);
+  }
+
+  void _addInsectsSpawnTimer() {
+    insectsSpawnTimer = InsectsSpawnTimer(level: this);
+    add(insectsSpawnTimer);
+  }
+
+  void _addPlantWeedsSpawnTimer() {
+    plantWeedsSpawnTimer = PlantWeedsSpawnTimer(level: this);
+    add(plantWeedsSpawnTimer);
+  }
+
+  void gameOver(GameOverType gameOverType) {
+    if (!isGameOver) {
+      isGameOver = true;
+
+      final gameOverBanner = GameOverBanner(
+        gameOverType: gameOverType,
+        position: backgroundImage.position,
+        size: backgroundImage.size,
+      );
+      add(gameOverBanner);
+    }
+  }
+
+  void collectSunResources(int count) {
+    sunResources = null;
+    sunResourcesCount += count;
+    _updateScoreTable();
+  }
+
+  void paySunResources(int count) {
+    sunResourcesCount -= count;
+    _updateScoreTable();
+  }
+
+  void collectEnergyResources(int count) {
+    energyResourcesCount += count;
+    _updateScoreTable();
+  }
+
+  void payEnergyResources(int count) {
+    energyResourcesCount -= count;
+    _updateScoreTable();
   }
 }
