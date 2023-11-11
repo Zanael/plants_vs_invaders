@@ -9,7 +9,7 @@ class Potion extends SpriteComponent with HasGameRef<PlantsVsInvaders> {
   final SpellType spellType;
 
   late final Timer hideTimer;
-  late final double hideTimerSeconds = 5;
+  late final double hideTimerSeconds = 7;
 
   double fixedDeltaTime = 1 / 60;
   double accumulatedTime = 0;

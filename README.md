@@ -1,16 +1,74 @@
-# plants_vs_invaders
+# Растения против Вредителей
 
-Plants vs invaders game.
+Игра для детей на тему сельского хозяйства. 
 
-## Getting Started
+## Описание игры
 
-This project is a starting point for a Flutter application.
+### Приветственный экран
 
-A few resources to get you started if this is your first Flutter project:
+![Приветственный экран](/screenshots/splash_screen.png)
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+### Карта уровней
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+![Карта уровней](/screenshots/levels_map.png)
+
+### Описание уровней
+
+#### Картофельное поле
+
+![Описание уровня: картофельное поле](/screenshots/level_info_potato.png)
+
+#### Морковное поле
+
+![Описание уровня: морковное поле](/screenshots/level_info_carrot.png)
+
+### Уровни
+
+#### Картофельное поле
+
+![Уровень: картофельное поле](/screenshots/level_overview_potato.png)
+
+#### Морковное поле
+
+![Уровень: морковное поле](/screenshots/level_overview_carrot.png)
+
+### Поддержка авиации
+
+![Поддержка авиации](/screenshots/spell_book.png)
+
+#### Действие на вредителей
+
+![Действие на вредителей](/screenshots/insects_spell.png)
+
+#### Действие на растения
+
+![Действие на растения](/screenshots/plants_spell.png)
+
+### Уменя фермера
+
+#### Лечение растений
+
+![Лечение растений](/screenshots/heal_plants.png)
+
+#### Уничтожение сорняков
+
+![Уничтожение сорняков](/screenshots/attack_weeds.png)
+
+#### Уничтожение насекомых
+
+![Уничтожение насекомых](/screenshots/attack_insects.png)
+
+### Конец уровня
+
+#### Победа
+
+![Победа](/screenshots/victory.png)
+
+#### Поражение
+
+![Поражение](/screenshots/defeat.png)
+
+---
+
+Автор: Девин Александр Павлович. 
+2023 (с)
