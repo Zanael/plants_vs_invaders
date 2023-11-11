@@ -7,7 +7,7 @@ import 'package:flame/text.dart';
 import 'package:plants_vs_invaders/components/plant_defender_type.dart';
 import 'package:plants_vs_invaders/plants_vs_invaders.dart';
 
-class SunCard extends SpriteComponent with HasGameRef<PlantsVsInvaders>, DragCallbacks {
+class SunCard extends SpriteComponent with HasGameRef<PlantsVsInvaders> {
   final PlantDefenderType plantDefenderType;
   final int price;
   Function(PlantDefenderType plantDefenderType, Vector2 position) checkNewPlantPosition;
@@ -27,6 +27,7 @@ class SunCard extends SpriteComponent with HasGameRef<PlantsVsInvaders>, DragCal
 
   @override
   FutureOr<void> onLoad() {
+    priority = 100;
     sprite = Sprite(game.images.fromCache('levels/sun_cards/${plantDefenderType.name}.png'));
     _addPrice();
     return super.onLoad();
@@ -50,36 +51,24 @@ class SunCard extends SpriteComponent with HasGameRef<PlantsVsInvaders>, DragCal
     add(textComponent);
   }
 
-  @override
-  void onDragStart(DragStartEvent event) {
-    // print('onDragStart: ${event.canvasPosition}');
+  void dragStart() {
     dragStartPosition.x = position.x;
     dragStartPosition.y = position.y;
-    super.onDragStart(event);
   }
 
-  @override
-  void onDragUpdate(DragUpdateEvent event) {
-    // print('onDragUpdate: ${event.parentPosition}');
-    position.x += event.delta.x;
-    position.y += event.delta.y;
-    super.onDragUpdate(event);
+  void dragUpdate(Vector2 delta) {
+    position.x = dragStartPosition.x + delta.x;
+    position.y = dragStartPosition.y + delta.y;
   }
 
-  @override
-  void onDragEnd(DragEndEvent event) {
-    // print('onDragEnd - position:$position, dragStartPosition: $dragStartPosition}');
+  void dragEnd() {
     checkNewPlantPosition.call(plantDefenderType, position);
     position.x = dragStartPosition.x;
     position.y = dragStartPosition.y;
-    super.onDragEnd(event);
   }
 
-  @override
-  void onDragCancel(DragCancelEvent event) {
-    // print('onDragCancel');
+  void dragCancel() {
     position.x = dragStartPosition.x;
     position.y = dragStartPosition.y;
-    super.onDragCancel(event);
   }
 }

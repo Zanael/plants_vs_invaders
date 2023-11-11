@@ -29,9 +29,12 @@ class Insect extends SpriteAnimationGroupComponent with HasGameRef<PlantsVsInvad
     required size,
     this.endGameCallback,
   }) : super(
+          key: ComponentKey.unique(),
           position: position,
           size: size,
         );
+
+  late final RectangleHitbox hitbox;
 
   final int damage = 20;
   bool gotHit = false;
@@ -49,7 +52,7 @@ class Insect extends SpriteAnimationGroupComponent with HasGameRef<PlantsVsInvad
   late final SpriteAnimation hitAnimation;
 
   double horizontalMovement = -1;
-  double moveSpeed = 50;
+  double moveSpeed = 30;
   Vector2 startingPosition = Vector2.zero();
   Vector2 velocity = Vector2.zero();
 
@@ -65,7 +68,8 @@ class Insect extends SpriteAnimationGroupComponent with HasGameRef<PlantsVsInvad
     _loadAllAnimations();
     _addCharacterBar();
     startingPosition = Vector2(position.x, position.y);
-    add(RectangleHitbox());
+    hitbox = RectangleHitbox();
+    add(hitbox);
 
     return super.onLoad();
   }
@@ -231,7 +235,12 @@ class Insect extends SpriteAnimationGroupComponent with HasGameRef<PlantsVsInvad
     gotHit = true;
     current = InsectAnimationStateType.hit;
     health -= damage;
-    if (health <= 0) removeFromParent();
+    if (health <= 0) {
+      gotHit = false;
+      position = Vector2(-2000, -2000);
+      hitbox.collisionType = CollisionType.inactive;
+      removeFromParent();
+    }
     _updateCharacterBar();
 
     Future.delayed(hitDuration, () {
@@ -242,8 +251,9 @@ class Insect extends SpriteAnimationGroupComponent with HasGameRef<PlantsVsInvad
   }
 
   void applyCircleBluePotion(SpellType spellType) {
-    if (moveSpeed - 30 > 0) {
-      moveSpeed -= 30;
+    final resultMoveSpeed = moveSpeed - moveSpeed * 0.3;
+    if (resultMoveSpeed > 0) {
+      moveSpeed = resultMoveSpeed;
     }
     _addPotionIcon(spellType);
   }
@@ -251,6 +261,7 @@ class Insect extends SpriteAnimationGroupComponent with HasGameRef<PlantsVsInvad
   void applyCircleYellowPotion(SpellType spellType) {
     totalHealth -= totalHealth * 0.2;
     health -= health * 0.2;
+    _updateCharacterBar();
     _addPotionIcon(spellType);
   }
 

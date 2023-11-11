@@ -8,9 +8,11 @@ import 'package:plants_vs_invaders/plants_vs_invaders.dart';
 
 class GameOverBanner extends PositionComponent with HasGameRef<PlantsVsInvaders> {
   final GameOverType gameOverType;
+  VoidCallback completed;
 
   GameOverBanner({
     required this.gameOverType,
+    required this.completed,
     required position,
     required size,
   }) : super(
@@ -53,6 +55,6 @@ class GameOverBanner extends PositionComponent with HasGameRef<PlantsVsInvaders>
 
     add(textComponent);
 
-    Future.delayed(const Duration(seconds: 5), () => game.reloadLevelsMap());
+    Future.delayed(const Duration(seconds: 5), () => completed.call());
   }
 }

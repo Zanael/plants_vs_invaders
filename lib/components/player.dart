@@ -56,11 +56,11 @@ class Player extends SpriteAnimationGroupComponent
   late final SpriteAnimation attackPlantsDownAnimation;
 
   PlayerDirection playerDirection = PlayerDirection.right;
-  PlayerActionType playerActionType = PlayerActionType.attackPlants;
+  PlayerActionType playerActionType = PlayerActionType.none;
 
   double horizontalMovement = 0;
   double verticalMovement = 0;
-  double moveSpeed = 150;
+  double moveSpeed = 90;
   Vector2 startingPosition = Vector2.zero();
   Vector2 velocity = Vector2.zero();
 
@@ -78,7 +78,7 @@ class Player extends SpriteAnimationGroupComponent
   bool isCollide = false;
   PlayerDirection collideDirection = PlayerDirection.right;
 
-  final int damageCount = 20;
+  final int damageCount = 10;
   final int healCount = 20;
 
   PlantWeed? targetWeedPlant;
@@ -91,10 +91,13 @@ class Player extends SpriteAnimationGroupComponent
     _loadAllAnimations();
     // _addCharacterBar();
     startingPosition = Vector2(position.x, position.y);
-    add(RectangleHitbox());
+    hitbox = RectangleHitbox();
+    add(hitbox);
 
     return super.onLoad();
   }
+
+  late final RectangleHitbox hitbox;
 
   @override
   void update(double dt) {
@@ -247,6 +250,7 @@ class Player extends SpriteAnimationGroupComponent
               playerStateType = PlayerAnimationStateType.attackPlantsLeft;
               break;
             case PlayerActionType.none:
+              playerStateType = PlayerAnimationStateType.idleLeft;
             default:
               break;
           }
@@ -263,6 +267,7 @@ class Player extends SpriteAnimationGroupComponent
               playerStateType = PlayerAnimationStateType.attackPlantsUp;
               break;
             case PlayerActionType.none:
+              playerStateType = PlayerAnimationStateType.idleUp;
             default:
               break;
           }
@@ -279,6 +284,7 @@ class Player extends SpriteAnimationGroupComponent
               playerStateType = PlayerAnimationStateType.attackPlantsRight;
               break;
             case PlayerActionType.none:
+              playerStateType = PlayerAnimationStateType.idleRight;
             default:
               break;
           }
@@ -295,6 +301,7 @@ class Player extends SpriteAnimationGroupComponent
               playerStateType = PlayerAnimationStateType.attackPlantsDown;
               break;
             case PlayerActionType.none:
+              playerStateType = PlayerAnimationStateType.idleDown;
             default:
               break;
           }
@@ -341,8 +348,8 @@ class Player extends SpriteAnimationGroupComponent
     }
     if (other is Insect) {
       playerActionType = PlayerActionType.attackInsects;
-      targetInsect = other;
-    }
+       targetInsect = other;
+     }
     if (other is SunResources) {
       other.removeFromParent();
       level.collectSunResources(50);
@@ -357,15 +364,15 @@ class Player extends SpriteAnimationGroupComponent
   @override
   void onCollisionEnd(PositionComponent other) {
     if (other is PlantWeed) {
-      playerActionType = PlayerActionType.heal;
+      playerActionType = PlayerActionType.none;
       targetWeedPlant = null;
     }
     if (other is PlantWeed) {
-      playerActionType = PlayerActionType.heal;
+      playerActionType = PlayerActionType.none;
       targetDefenderPlant = null;
     }
     if (other is Insect) {
-      playerActionType = PlayerActionType.heal;
+      playerActionType = PlayerActionType.none;
       targetInsect = null;
     }
     super.onCollisionEnd(other);

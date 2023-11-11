@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
@@ -6,7 +7,10 @@ import 'package:plants_vs_invaders/plants_vs_invaders.dart';
 
 class MenuButton extends SpriteComponent with HasGameRef<PlantsVsInvaders>, TapCallbacks {
 
+  final VoidCallback callback;
+
   MenuButton({
+    required this.callback,
     required position,
     required size,
   }) : super(
@@ -23,7 +27,7 @@ class MenuButton extends SpriteComponent with HasGameRef<PlantsVsInvaders>, TapC
 
   @override
   void onTapUp(TapUpEvent event) {
-    game.reloadLevelsMap();
+    callback.call();
     super.onTapUp(event);
   }
 }

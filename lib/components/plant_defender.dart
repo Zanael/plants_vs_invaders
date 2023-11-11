@@ -22,17 +22,19 @@ import 'package:plants_vs_invaders/components/plane_cloud.dart';
 import 'package:plants_vs_invaders/components/plant.dart';
 import 'package:plants_vs_invaders/components/plant_defender_type.dart';
 import 'package:plants_vs_invaders/components/potion.dart';
-import 'package:plants_vs_invaders/components/sprite_frame.dart';
-import 'package:plants_vs_invaders/components/utils.dart';
 import 'package:plants_vs_invaders/level.dart';
 import 'package:plants_vs_invaders/plants_vs_invaders.dart';
 
 class PlantDefender extends Plant with HasGameRef<PlantsVsInvaders>, CollisionCallbacks {
-  late final Level level;
+  final Function(PlantDefender plantDefender, int rowOnBoard, int columnOnBoard) wasKilled;
+  final Function(Bullet bullet) spawnBullet;
 
   PlantDefender({
-    required this.level,
     required this.plantDefenderType,
+    required this.rowOnBoard,
+    required this.columnOnBoard,
+    required this.spawnBullet,
+    required this.wasKilled,
     required position,
     required size,
   }) : super(
@@ -40,6 +42,8 @@ class PlantDefender extends Plant with HasGameRef<PlantsVsInvaders>, CollisionCa
           position: position,
           size: size,
         );
+
+  late final RectangleHitbox hitbox;
 
   final PlantDefenderType plantDefenderType;
   final double animationStepTime = 0.5;
@@ -60,11 +64,15 @@ class PlantDefender extends Plant with HasGameRef<PlantsVsInvaders>, CollisionCa
 
   bool isInCloud = false;
 
+  final int rowOnBoard;
+  final int columnOnBoard;
+
   @override
   FutureOr<void> onLoad() {
     _loadAllAnimations();
     _addCharacterBar();
-    add(RectangleHitbox());
+    hitbox = RectangleHitbox();
+    add(hitbox);
 
     plantPosition.x = position.x;
     plantPosition.y = position.y;
@@ -74,7 +82,7 @@ class PlantDefender extends Plant with HasGameRef<PlantsVsInvaders>, CollisionCa
         repeat: true,
         autoStart: true,
         onTick: () {
-          level.add(Bullet(
+          spawnBullet(Bullet(
             plantDefenderType: plantDefenderType,
             damage: BulletDamage.damage(plantDefenderType),
             moveSpeed: BulletSpeed.speed(plantDefenderType) * bulletSpeedCoefficient,
@@ -216,7 +224,13 @@ class PlantDefender extends Plant with HasGameRef<PlantsVsInvaders>, CollisionCa
     gotHit = true;
     current = PlantAnimationStateType.hit;
     health -= damage;
-    if (health <= 0) removeFromParent();
+    if (health <= 0) {
+      gotHit = false;
+      position = Vector2(-4000, -4000);
+      hitbox.collisionType = CollisionType.inactive;
+      removeFromParent();
+      wasKilled(this, rowOnBoard, columnOnBoard);
+    }
     _updateCharacterBar();
 
     Future.delayed(hitDuration, () {
@@ -239,11 +253,13 @@ class PlantDefender extends Plant with HasGameRef<PlantsVsInvaders>, CollisionCa
   void applyRectYellowPotion(SpellType spellType) {
     totalHealth += totalHealth * 0.2;
     health += health * 0.2;
+    _updateCharacterBar();
     _addPotionIcon(spellType);
   }
 
   void applyRectRedPotion(SpellType spellType) {
     health = totalHealth;
+    _updateCharacterBar();
     _addPotionIcon(spellType);
   }
 

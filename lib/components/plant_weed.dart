@@ -21,8 +21,13 @@ import 'package:plants_vs_invaders/components/utils.dart';
 import 'package:plants_vs_invaders/plants_vs_invaders.dart';
 
 class PlantWeed extends Plant with HasGameRef<PlantsVsInvaders>, CollisionCallbacks {
+  final Function(PlantWeed plantWeed, int rowOnBoard, int columnOnBoard) wasKilled;
+
   PlantWeed({
     required this.plantWeedType,
+    required this.rowOnBoard,
+    required this.columnOnBoard,
+    required this.wasKilled,
     required position,
     required size,
   }) : super(
@@ -30,6 +35,8 @@ class PlantWeed extends Plant with HasGameRef<PlantsVsInvaders>, CollisionCallba
     position: position,
     size: size,
   );
+
+  late final RectangleHitbox hitbox;
 
   final PlantWeedType plantWeedType;
   final double animationStepTime = 0.5;
@@ -45,11 +52,15 @@ class PlantWeed extends Plant with HasGameRef<PlantsVsInvaders>, CollisionCallba
   int health = 100;
   late CharacterBar characterBar;
 
+  final int rowOnBoard;
+  final int columnOnBoard;
+
   @override
   FutureOr<void> onLoad() {
     _loadAllAnimations();
     _addCharacterBar();
-    add(RectangleHitbox());
+    hitbox = RectangleHitbox();
+    add(hitbox);
 
     return super.onLoad();
   }
@@ -162,7 +173,13 @@ class PlantWeed extends Plant with HasGameRef<PlantsVsInvaders>, CollisionCallba
     gotHit = true;
     current = PlantAnimationStateType.hit;
     health -= damage;
-    if (health <= 0) removeFromParent();
+    if (health <= 0) {
+      gotHit = false;
+      position = Vector2(-3000, -3000);
+      hitbox.collisionType = CollisionType.inactive;
+      removeFromParent();
+      wasKilled(this, rowOnBoard, columnOnBoard);
+    }
     _updateCharacterBar();
 
     Future.delayed(hitDuration, () {

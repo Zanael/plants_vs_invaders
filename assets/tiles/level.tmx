@@ -404,7 +404,7 @@
   <object id="69" type="SunResource" x="74" y="233" width="66" height="66"/>
   <object id="70" type="EnergyResource" x="74" y="713" width="66" height="66"/>
  </objectgroup>
- <objectgroup id="24" name="collisions">
+ <objectgroup id="24" name="collisions" locked="1">
   <object id="79" x="117" y="0" width="10" height="832"/>
   <object id="83" type="EndGame" x="107" y="0" width="10" height="832"/>
   <object id="80" x="1027" y="0" width="10" height="832"/>

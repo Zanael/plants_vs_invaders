@@ -4,13 +4,13 @@ class BulletDamage {
   static int damage(PlantDefenderType plantDefenderType) {
     switch (plantDefenderType) {
       case PlantDefenderType.peas:
-        return 20;
+        return 8;
       case PlantDefenderType.oats:
-        return 25;
+        return 12;
       case PlantDefenderType.buckwheat:
-        return 30;
+        return 20;
       case PlantDefenderType.clover:
-        return 100;
+        return 20;
     }
   }
 }

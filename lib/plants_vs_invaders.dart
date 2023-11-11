@@ -31,6 +31,7 @@ class PlantsVsInvaders extends FlameGame with HasKeyboardHandlerComponents, HasC
   }
 
   void _loadLevel({required PlantBaseType levelPlantBaseType}) {
+
     _currentLevel = Level(levelPlantBaseType: levelPlantBaseType);
   }
 
@@ -44,6 +45,8 @@ class PlantsVsInvaders extends FlameGame with HasKeyboardHandlerComponents, HasC
   }
 
   void _assembly() {
+    _camera.removeFromParent();
+    _currentLevel.removeFromParent();
     addAll([
       _camera,
       _currentLevel,

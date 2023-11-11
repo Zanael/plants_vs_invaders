@@ -13,7 +13,7 @@ class InsectsSpawnTimer extends TimerComponent {
   InsectsSpawnTimer({
     required this.level,
   }) : super(
-          period: 4,
+          period: 2,
           repeat: true,
         );
 

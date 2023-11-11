@@ -6,6 +6,7 @@ import 'package:flame/extensions.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:plants_vs_invaders/animation_state_types/available_unit_types.dart';
 import 'package:plants_vs_invaders/animation_state_types/spell_type.dart';
+import 'package:plants_vs_invaders/animation_state_types/victory_timer_bar_colors.dart';
 import 'package:plants_vs_invaders/components/collision_block.dart';
 import 'package:plants_vs_invaders/components/end_game_block.dart';
 import 'package:plants_vs_invaders/components/energy_card.dart';
@@ -36,10 +37,11 @@ import 'package:plants_vs_invaders/components/sun_card_cost.dart';
 import 'package:plants_vs_invaders/components/sun_generator.dart';
 import 'package:plants_vs_invaders/components/sun_resources.dart';
 import 'package:plants_vs_invaders/components/sun_type.dart';
+import 'package:plants_vs_invaders/components/victory_timer_bar.dart';
 import 'package:plants_vs_invaders/components/wind_generator.dart';
 import 'package:plants_vs_invaders/plants_vs_invaders.dart';
 
-class Level extends World with HasGameRef<PlantsVsInvaders>, TapCallbacks {
+class Level extends World with HasGameRef<PlantsVsInvaders>, TapCallbacks, DragCallbacks {
   late Player player;
   late SpriteComponent backgroundImage;
   late TiledComponent tiledLevel;
@@ -109,7 +111,8 @@ class Level extends World with HasGameRef<PlantsVsInvaders>, TapCallbacks {
   late final InsectsSpawnTimer insectsSpawnTimer;
   late final PlantWeedsSpawnTimer plantWeedsSpawnTimer;
   late final Timer victoryTimer;
-  late final double victoryTimerSeconds = 60;
+  late final double victoryTimerSeconds = 180;
+  late VictoryTimerBar victoryTimerBar;
   SpellBook? spellBook;
   SpellType? selectedSpellType;
 
@@ -118,13 +121,16 @@ class Level extends World with HasGameRef<PlantsVsInvaders>, TapCallbacks {
   double fixedDeltaTime = 1 / 60;
   double accumulatedTime = 0;
 
+  SunCard? sunCardToDrag;
+  Vector2 dragStartPosition = Vector2.zero();
+
   Level({
     required this.levelPlantBaseType,
   });
 
   @override
   FutureOr<void> onLoad() async {
-    player = Player(level: this, position: Vector2.zero());
+    player = Player(level: this, position: Vector2(-1000, -1000));
     fieldType = levelPlantBaseType;
     _loadBackgroundImage();
     await _loadTiledLevel();
@@ -159,6 +165,8 @@ class Level extends World with HasGameRef<PlantsVsInvaders>, TapCallbacks {
           _updateEnergyResources();
         }));
 
+    _addVictoryTimerBar();
+
     return super.onLoad();
   }
 
@@ -168,6 +176,7 @@ class Level extends World with HasGameRef<PlantsVsInvaders>, TapCallbacks {
 
     while (accumulatedTime >= fixedDeltaTime) {
       victoryTimer.update(fixedDeltaTime);
+      _updateVictoryTimerBar();
       if (victoryTimer.finished) {
         gameOver(GameOverType.victory);
       }
@@ -438,11 +447,19 @@ class Level extends World with HasGameRef<PlantsVsInvaders>, TapCallbacks {
                 boardMapSpawnPoint[rowIndex][columnIndex].position.y,
                 boardMapSpawnPoint[rowIndex][columnIndex].size.x,
                 boardMapSpawnPoint[rowIndex][columnIndex].size.y,
-              ).containsPoint(position)) {
+              ).containsPoint(Vector2(position.x + 45, position.y + 65))) {
+                // INFO: Проверяем центр карточки при ее размере 91x129.
                 if (plantsBoard[rowIndex][columnIndex] == null) {
                   PlantDefender plantDefender = PlantDefender(
-                    level: this,
                     plantDefenderType: plantDefenderType,
+                    rowOnBoard: rowIndex,
+                    columnOnBoard: columnIndex,
+                    spawnBullet: (bullet) {
+                      add(bullet);
+                    },
+                    wasKilled: (plantDefender, rowOnBoard, columnOnBoard) {
+                      plantsBoard[rowOnBoard][columnOnBoard] = null;
+                    },
                     position: Vector2(
                       boardMapSpawnPoint[rowIndex][columnIndex].position.x + 20,
                       boardMapSpawnPoint[rowIndex][columnIndex].position.y + 30,
@@ -503,6 +520,10 @@ class Level extends World with HasGameRef<PlantsVsInvaders>, TapCallbacks {
 
   void _addMenuButton() {
     menuButton = MenuButton(
+      callback: () {
+        game.reloadLevelsMap();
+        removeFromParent();
+      },
       position: menuButtonSpawnPoint.position,
       size: menuButtonSpawnPoint.size,
     );
@@ -609,6 +630,11 @@ class Level extends World with HasGameRef<PlantsVsInvaders>, TapCallbacks {
     final spawnPoint = boardMapSpawnPoint[spawnPointRowIndex][spawnPointColumnIndex];
     PlantWeed plantWeed = PlantWeed(
       plantWeedType: plantWeedType,
+      rowOnBoard: spawnPointRowIndex,
+      columnOnBoard: spawnPointColumnIndex,
+      wasKilled: (plantWeed, rowOnBoard, columnOnBoard) {
+        plantsBoard[rowOnBoard][columnOnBoard] = null;
+      },
       position: Vector2(
         spawnPoint.position.x + 20,
         spawnPoint.position.y + 30,
@@ -639,6 +665,10 @@ class Level extends World with HasGameRef<PlantsVsInvaders>, TapCallbacks {
 
       final gameOverBanner = GameOverBanner(
         gameOverType: gameOverType,
+        completed: () {
+          game.reloadLevelsMap();
+          removeFromParent();
+        },
         position: backgroundImage.position,
         size: backgroundImage.size,
       );
@@ -728,9 +758,9 @@ class Level extends World with HasGameRef<PlantsVsInvaders>, TapCallbacks {
           ).containsPoint(event.localPosition)) {
             final plane = PlaneAirForce(
                 position: Vector2(
-                  planeSpawnPoints[rowIndex].position.x,
-                  planeSpawnPoints[rowIndex].position.y,
-                ));
+              planeSpawnPoints[rowIndex].position.x,
+              planeSpawnPoints[rowIndex].position.y,
+            ));
             add(plane);
 
             final planeCloud = PlaneCloud(
@@ -752,5 +782,88 @@ class Level extends World with HasGameRef<PlantsVsInvaders>, TapCallbacks {
       selectedSpellType = null;
     }
     super.onTapUp(event);
+  }
+
+  @override
+  void onRemove() {
+    // TODO: Внимательно проверить dispose ресурсов.
+    super.onRemove();
+  }
+
+  @override
+  void onDragStart(DragStartEvent event) {
+    for (int i = 0; i < sunCardSpawnPoints.length; i++) {
+      if (Rect.fromLTWH(
+        sunCardSpawnPoints[i].position.x,
+        sunCardSpawnPoints[i].position.y,
+        sunCardSpawnPoints[i].size.x,
+        sunCardSpawnPoints[i].size.y,
+      ).containsPoint(event.localPosition)) {
+        sunCardToDrag = sunCards[i];
+        dragStartPosition = Vector2(
+          event.localPosition.x,
+          event.localPosition.y,
+        );
+        sunCardToDrag?.dragStart();
+        break;
+      }
+    }
+
+    super.onDragStart(event);
+  }
+
+  @override
+  void onDragUpdate(DragUpdateEvent event) {
+    final delta = Vector2(
+      event.localPosition.x - dragStartPosition.x,
+      event.localPosition.y - dragStartPosition.y,
+    );
+    sunCardToDrag?.dragUpdate(delta);
+    super.onDragUpdate(event);
+  }
+
+  @override
+  void onDragEnd(DragEndEvent event) {
+    sunCardToDrag?.dragEnd();
+    sunCardToDrag = null;
+    dragStartPosition = Vector2.zero();
+    super.onDragEnd(event);
+  }
+
+  @override
+  void onDragCancel(DragCancelEvent event) {
+    sunCardToDrag?.dragCancel();
+    sunCardToDrag = null;
+    dragStartPosition = Vector2.zero();
+    super.onDragCancel(event);
+  }
+
+  void _addVictoryTimerBar() {
+    victoryTimerBar = VictoryTimerBar(
+      color: VictoryTimerBarColors.front,
+      backgroundColor: VictoryTimerBarColors.back,
+      borderColor: VictoryTimerBarColors.border,
+      position: Vector2(754, 810),
+      size: Vector2(249, 15),
+      progress: 0,
+    );
+    add(victoryTimerBar);
+  }
+
+  void _updateVictoryTimerBar() {
+    final victoryTimerCurrentSeconds = victoryTimer.current;
+    final victoryTimerTotalSeconds = victoryTimerSeconds;
+    final progress = victoryTimerCurrentSeconds / victoryTimerTotalSeconds;
+
+    victoryTimerBar.removeFromParent();
+    victoryTimerBar = VictoryTimerBar(
+      color: VictoryTimerBarColors.front,
+      backgroundColor: VictoryTimerBarColors.back,
+      borderColor: VictoryTimerBarColors.border,
+      position: Vector2(754, 810),
+      size: Vector2(249, 15),
+      progress: progress,
+    );
+    add(victoryTimerBar);
   }
 }

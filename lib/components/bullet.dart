@@ -28,9 +28,12 @@ class Bullet extends SpriteAnimationGroupComponent with HasGameRef<PlantsVsInvad
     required position,
     // required size,
   }) : super(
+    key: ComponentKey.unique(),
     position: position,
     size: Vector2(24, 24),
   );
+
+  late final RectangleHitbox hitbox;
 
   final int damage;
   final PlantDefenderType plantDefenderType;
@@ -50,7 +53,8 @@ class Bullet extends SpriteAnimationGroupComponent with HasGameRef<PlantsVsInvad
   FutureOr<void> onLoad() {
     _loadAllAnimations();
     startingPosition = Vector2(position.x, position.y);
-    add(RectangleHitbox());
+    hitbox = RectangleHitbox();
+    add(hitbox);
 
     return super.onLoad();
   }
@@ -120,6 +124,8 @@ class Bullet extends SpriteAnimationGroupComponent with HasGameRef<PlantsVsInvad
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
     if (other is Insect) {
       other.hit(damage);
+      position = Vector2(-5000, -5000);
+      hitbox.collisionType = CollisionType.inactive;
       removeFromParent();
     }
     super.onCollision(intersectionPoints, other);

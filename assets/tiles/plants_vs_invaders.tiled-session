@@ -15,13 +15,13 @@
         },
         "level.tmx": {
             "expandedGroupLayers": [
-                10,
-                9
+                9,
+                10
             ],
             "scale": 0.7126,
             "selectedLayer": 18,
             "viewCenter": {
-                "x": 585.1810272242493,
+                "x": 586.5843390401348,
                 "y": 579.5677799607073
             }
         },
