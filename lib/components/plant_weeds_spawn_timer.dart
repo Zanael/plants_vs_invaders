@@ -2,11 +2,13 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flame/components.dart';
+import 'package:plants_vs_invaders/animation_state_types/available_unit_types.dart';
 import 'package:plants_vs_invaders/components/plant_weed_type.dart';
 import 'package:plants_vs_invaders/level.dart';
 
 class PlantWeedsSpawnTimer extends TimerComponent {
   final Level level;
+  late final List<PlantWeedType> plantWeedTypes;
 
   PlantWeedsSpawnTimer({
     required this.level,
@@ -17,6 +19,7 @@ class PlantWeedsSpawnTimer extends TimerComponent {
 
   @override
   FutureOr<void> onLoad() {
+    plantWeedTypes = AvailableUnitTypes.plantWeedsTypes(level.levelPlantBaseType);
     return super.onLoad();
   }
 
@@ -43,8 +46,8 @@ class PlantWeedsSpawnTimer extends TimerComponent {
     final chanceForSpawn = random.nextInt(2);
     if (chanceForSpawn == 0) {
       // Рандомно выбираются сорняки
-      final weedTypeIndex = random.nextInt(5);
-      final plantWeedType = PlantWeedType.values[weedTypeIndex];
+      final weedTypeIndex = random.nextInt(plantWeedTypes.length);
+      final plantWeedType = plantWeedTypes[weedTypeIndex];
 
       level.spawnWeeds(plantWeedType: plantWeedType, spawnPointRowIndex: spawnPointRowIndex, spawnPointColumnIndex: spawnPointColumnIndex);
     }

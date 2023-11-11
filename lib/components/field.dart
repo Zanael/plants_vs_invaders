@@ -18,7 +18,7 @@ class Field extends SpriteComponent with HasGameRef<PlantsVsInvaders> {
 
   @override
   FutureOr<void> onLoad() {
-    sprite = Sprite(game.images.fromCache('levels/fields/potato.png'));
+    sprite = Sprite(game.images.fromCache('levels/fields/${plantBaseType.name}.png'));
 
     return super.onLoad();
   }

@@ -4,6 +4,7 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame_tiled/flame_tiled.dart';
+import 'package:plants_vs_invaders/animation_state_types/available_unit_types.dart';
 import 'package:plants_vs_invaders/animation_state_types/spell_type.dart';
 import 'package:plants_vs_invaders/components/collision_block.dart';
 import 'package:plants_vs_invaders/components/end_game_block.dart';
@@ -42,7 +43,7 @@ class Level extends World with HasGameRef<PlantsVsInvaders>, TapCallbacks {
   late Player player;
   late SpriteComponent backgroundImage;
   late TiledComponent tiledLevel;
-  final int levelNumber;
+  final PlantBaseType levelPlantBaseType;
   final int boardRows = 5;
   final int boardColumns = 9;
 
@@ -87,11 +88,7 @@ class Level extends World with HasGameRef<PlantsVsInvaders>, TapCallbacks {
   late final SpriteFrame windGeneratorSpawnPoint;
   late final SpriteFrame windResourceSpawnPoint;
 
-  final List<PlantDefenderType> plantDefenderTypes = [
-    PlantDefenderType.peas,
-    PlantDefenderType.oats,
-    PlantDefenderType.buckwheat,
-  ];
+  late final List<PlantDefenderType> plantDefenderTypes;
   final List<SunCard> sunCards = [];
   final List<EnergyCard> energyCards = [];
   final planeCost = 100;
@@ -100,7 +97,7 @@ class Level extends World with HasGameRef<PlantsVsInvaders>, TapCallbacks {
   late ScoreTable? scoreTable;
   late final MenuButton menuButton;
   late final Field field;
-  final PlantBaseType fieldType = PlantBaseType.potato;
+  late final PlantBaseType fieldType;
   SunType sunType = SunType.clouds;
   late final Sun sun;
   late final SunGenerator sunGenerator;
@@ -122,12 +119,13 @@ class Level extends World with HasGameRef<PlantsVsInvaders>, TapCallbacks {
   double accumulatedTime = 0;
 
   Level({
-    required this.levelNumber,
+    required this.levelPlantBaseType,
   });
 
   @override
   FutureOr<void> onLoad() async {
     player = Player(level: this, position: Vector2.zero());
+    fieldType = levelPlantBaseType;
     _loadBackgroundImage();
     await _loadTiledLevel();
     _loadBoardMapPoints();
@@ -407,6 +405,7 @@ class Level extends World with HasGameRef<PlantsVsInvaders>, TapCallbacks {
   }
 
   void _addSunCards() {
+    plantDefenderTypes = AvailableUnitTypes.plantDefendersTypes(levelPlantBaseType);
     for (int i = 0; i < plantDefenderTypes.length; i++) {
       int cost = 0;
       switch (plantDefenderTypes[i]) {
@@ -692,7 +691,7 @@ class Level extends World with HasGameRef<PlantsVsInvaders>, TapCallbacks {
       },
       onRectBluePotion: () {
         _closeSpellBook();
-        selectedSpellType = SpellType.rectRedPotion;
+        selectedSpellType = SpellType.rectBluePotion;
       },
       onRectYellowPotion: () {
         _closeSpellBook();

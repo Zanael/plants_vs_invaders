@@ -2,11 +2,13 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flame/components.dart';
+import 'package:plants_vs_invaders/animation_state_types/available_unit_types.dart';
 import 'package:plants_vs_invaders/components/insects_types.dart';
 import 'package:plants_vs_invaders/level.dart';
 
 class InsectsSpawnTimer extends TimerComponent {
   final Level level;
+  late final List<InsectsTypes> insectsTypes;
 
   InsectsSpawnTimer({
     required this.level,
@@ -17,6 +19,7 @@ class InsectsSpawnTimer extends TimerComponent {
 
   @override
   FutureOr<void> onLoad() {
+    insectsTypes = AvailableUnitTypes.insectsTypes(level.levelPlantBaseType);
     return super.onLoad();
   }
 
@@ -31,8 +34,8 @@ class InsectsSpawnTimer extends TimerComponent {
     final chanceForSpawn = random.nextInt(2);
     if (chanceForSpawn == 0) {
       // Рандомно выбираются насекомые
-      final insectTypeIndex = random.nextInt(4);
-      final insectType = InsectsTypes.values[insectTypeIndex];
+      final insectTypeIndex = random.nextInt(insectsTypes.length);
+      final insectType = insectsTypes[insectTypeIndex];
 
       level.spawnInsects(insectsType: insectType, spawnPoint: level.insectsSpawnPoints[spawnPointIndex]);
     }

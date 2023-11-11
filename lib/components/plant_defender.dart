@@ -12,13 +12,16 @@ import 'package:plants_vs_invaders/animation_state_types/plant_animation_state_t
 import 'package:plants_vs_invaders/animation_state_types/player_action_type.dart';
 import 'package:plants_vs_invaders/animation_state_types/player_animation_state_type.dart';
 import 'package:plants_vs_invaders/animation_state_types/player_direction.dart';
+import 'package:plants_vs_invaders/animation_state_types/spell_type.dart';
 import 'package:plants_vs_invaders/components/bullet.dart';
 import 'package:plants_vs_invaders/components/character_bar.dart';
 import 'package:plants_vs_invaders/components/collision_block.dart';
 import 'package:plants_vs_invaders/components/end_game_block.dart';
 import 'package:plants_vs_invaders/components/insects_types.dart';
+import 'package:plants_vs_invaders/components/plane_cloud.dart';
 import 'package:plants_vs_invaders/components/plant.dart';
 import 'package:plants_vs_invaders/components/plant_defender_type.dart';
+import 'package:plants_vs_invaders/components/potion.dart';
 import 'package:plants_vs_invaders/components/sprite_frame.dart';
 import 'package:plants_vs_invaders/components/utils.dart';
 import 'package:plants_vs_invaders/level.dart';
@@ -50,9 +53,12 @@ class PlantDefender extends Plant with HasGameRef<PlantsVsInvaders>, CollisionCa
   Vector2 plantPosition = Vector2.zero();
 
   bool gotHit = false;
-  final int totalHealth = 100;
-  int health = 100;
+  double totalHealth = 100;
+  double health = 100;
+  double bulletSpeedCoefficient = 1;
   late CharacterBar characterBar;
+
+  bool isInCloud = false;
 
   @override
   FutureOr<void> onLoad() {
@@ -71,7 +77,7 @@ class PlantDefender extends Plant with HasGameRef<PlantsVsInvaders>, CollisionCa
           level.add(Bullet(
             plantDefenderType: plantDefenderType,
             damage: BulletDamage.damage(plantDefenderType),
-            moveSpeed: BulletSpeed.speed(plantDefenderType),
+            moveSpeed: BulletSpeed.speed(plantDefenderType) * bulletSpeedCoefficient,
             position: Vector2(
               plantPosition.x + 45,
               plantPosition.y + 25,
@@ -174,12 +180,33 @@ class PlantDefender extends Plant with HasGameRef<PlantsVsInvaders>, CollisionCa
   @override
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
     if (other is CollisionBlock) {}
+    if (other is PlaneCloud) {
+      if (!isInCloud) {
+        isInCloud = true;
+        switch (other.spellType) {
+          case SpellType.rectBluePotion:
+            applyRectBluePotion(other.spellType);
+            break;
+          case SpellType.rectYellowPotion:
+            applyRectYellowPotion(other.spellType);
+            break;
+          case SpellType.rectRedPotion:
+            applyRectRedPotion(other.spellType);
+            break;
+          default:
+            break;
+        }
+      }
+    }
     super.onCollision(intersectionPoints, other);
   }
 
   @override
   void onCollisionEnd(PositionComponent other) {
     if (other is CollisionBlock) {}
+    if (other is PlaneCloud) {
+      isInCloud = false;
+    }
     super.onCollisionEnd(other);
   }
 
@@ -204,9 +231,27 @@ class PlantDefender extends Plant with HasGameRef<PlantsVsInvaders>, CollisionCa
     _updateCharacterBar();
   }
 
-  void applyCircleBluePotion() {}
+  void applyRectBluePotion(SpellType spellType) {
+    bulletSpeedCoefficient = 1.5;
+    _addPotionIcon(spellType);
+  }
 
-  void applyCircleYellowPotion() {}
+  void applyRectYellowPotion(SpellType spellType) {
+    totalHealth += totalHealth * 0.2;
+    health += health * 0.2;
+    _addPotionIcon(spellType);
+  }
 
-  void applyCircleRedPotion() {}
+  void applyRectRedPotion(SpellType spellType) {
+    health = totalHealth;
+    _addPotionIcon(spellType);
+  }
+
+  void _addPotionIcon(SpellType spellType) {
+    add(Potion(
+      spellType: spellType,
+      position: Vector2(54, -16),
+      size: Vector2.all(32),
+    ));
+  }
 }

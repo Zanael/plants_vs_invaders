@@ -15,6 +15,7 @@ import 'package:plants_vs_invaders/components/end_game_block.dart';
 import 'package:plants_vs_invaders/components/insects_types.dart';
 import 'package:plants_vs_invaders/components/plane_cloud.dart';
 import 'package:plants_vs_invaders/components/plant_defender.dart';
+import 'package:plants_vs_invaders/components/potion.dart';
 import 'package:plants_vs_invaders/components/sprite_frame.dart';
 import 'package:plants_vs_invaders/components/utils.dart';
 import 'package:plants_vs_invaders/plants_vs_invaders.dart';
@@ -35,8 +36,8 @@ class Insect extends SpriteAnimationGroupComponent with HasGameRef<PlantsVsInvad
   final int damage = 20;
   bool gotHit = false;
   bool attackPlant = false;
-  final int totalHealth = 100;
-  int health = 100;
+  double totalHealth = 100;
+  double health = 100;
   late CharacterBar characterBar;
 
   final InsectsTypes insectsType;
@@ -180,9 +181,13 @@ class Insect extends SpriteAnimationGroupComponent with HasGameRef<PlantsVsInvad
     if (other is PlantDefender) {
       if (!attackPlant) {
         attackPlant = true;
-        attackTimer = TimerComponent(period: 2, repeat: true, autoStart: true, onTick: () {
-          other.hit(damage);
-        });
+        attackTimer = TimerComponent(
+            period: 2,
+            repeat: true,
+            autoStart: true,
+            onTick: () {
+              other.hit(damage);
+            });
         add(attackTimer);
       }
     }
@@ -191,13 +196,13 @@ class Insect extends SpriteAnimationGroupComponent with HasGameRef<PlantsVsInvad
         isInCloud = true;
         switch (other.spellType) {
           case SpellType.circleBluePotion:
-            applyCircleBluePotion();
+            applyCircleBluePotion(other.spellType);
             break;
           case SpellType.circleYellowPotion:
-            applyCircleYellowPotion();
+            applyCircleYellowPotion(other.spellType);
             break;
           case SpellType.circleRedPotion:
-            applyCircleRedPotion();
+            applyCircleRedPotion(other.spellType);
             break;
           default:
             break;
@@ -236,15 +241,29 @@ class Insect extends SpriteAnimationGroupComponent with HasGameRef<PlantsVsInvad
     });
   }
 
-  void applyCircleBluePotion() {
-    moveSpeed -= 20;
+  void applyCircleBluePotion(SpellType spellType) {
+    if (moveSpeed - 30 > 0) {
+      moveSpeed -= 30;
+    }
+    _addPotionIcon(spellType);
   }
 
-  void applyCircleYellowPotion() {
-
+  void applyCircleYellowPotion(SpellType spellType) {
+    totalHealth -= totalHealth * 0.2;
+    health -= health * 0.2;
+    _addPotionIcon(spellType);
   }
 
-  void applyCircleRedPotion() {
+  void applyCircleRedPotion(SpellType spellType) {
+    _addPotionIcon(spellType);
     removeFromParent();
+  }
+
+  void _addPotionIcon(SpellType spellType) {
+    add(Potion(
+      spellType: spellType,
+      position: Vector2(54, -16),
+      size: Vector2.all(32),
+    ));
   }
 }
