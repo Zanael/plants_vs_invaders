@@ -115,7 +115,7 @@ class Bullet extends SpriteAnimationGroupComponent with HasGameRef<PlantsVsInvad
     velocity.x = horizontalMovement * moveSpeed;
     position.x += velocity.x * dt;
 
-    if (position.x > game.camera.viewport.size.x) {
+    if (position.x > game.gameWidth) {
       removeFromParent();
     }
   }

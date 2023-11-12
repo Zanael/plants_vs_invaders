@@ -78,7 +78,7 @@ class PlaneAirForce extends SpriteAnimationGroupComponent with HasGameRef<Plants
     velocity.x = horizontalMovement * moveSpeed;
     position.x += velocity.x * dt;
 
-    if (position.x > game.camera.viewport.size.x) {
+    if (position.x > game.gameWidth) {
       removeFromParent();
     }
   }

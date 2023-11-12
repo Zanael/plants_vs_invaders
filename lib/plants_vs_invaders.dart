@@ -17,6 +17,9 @@ class PlantsVsInvaders extends FlameGame with HasKeyboardHandlerComponents, HasC
   late CameraComponent _camera;
   late World _currentLevel;
 
+  final double gameWidth = 1120;
+  final double gameHeight = 832;
+
   @override
   FutureOr<void> onLoad() async {
     await _initialize();
@@ -37,8 +40,8 @@ class PlantsVsInvaders extends FlameGame with HasKeyboardHandlerComponents, HasC
 
   void _prepareCamera() {
     _camera = CameraComponent.withFixedResolution(
-      width: 1120,
-      height: 832,
+      width: gameWidth,
+      height: gameHeight,
       world: _currentLevel,
     );
     _camera.viewfinder.anchor = Anchor.topLeft;
