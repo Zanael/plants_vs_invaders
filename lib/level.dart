@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:html' as html;
 
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
@@ -111,7 +113,7 @@ class Level extends World with HasGameRef<PlantsVsInvaders>, TapCallbacks, DragC
   late final InsectsSpawnTimer insectsSpawnTimer;
   late final PlantWeedsSpawnTimer plantWeedsSpawnTimer;
   late final Timer victoryTimer;
-  late final double victoryTimerSeconds = 180;
+  late final double victoryTimerSeconds = 5;
   late VictoryTimerBar victoryTimerBar;
   SpellBook? spellBook;
   SpellType? selectedSpellType;
@@ -521,8 +523,14 @@ class Level extends World with HasGameRef<PlantsVsInvaders>, TapCallbacks, DragC
   void _addMenuButton() {
     menuButton = MenuButton(
       callback: () {
-        game.reloadLevelsMap();
-        removeFromParent();
+        final Map<String, dynamic> data = {
+          "action": "failed"
+        };
+        const jsonEncoder = JsonEncoder();
+        final json = jsonEncoder.convert(data);
+        html.window.parent?.postMessage(json, "*");
+        // game.reloadLevelsMap();
+        // removeFromParent();
       },
       position: menuButtonSpawnPoint.position,
       size: menuButtonSpawnPoint.size,
@@ -666,7 +674,25 @@ class Level extends World with HasGameRef<PlantsVsInvaders>, TapCallbacks, DragC
       final gameOverBanner = GameOverBanner(
         gameOverType: gameOverType,
         completed: () {
-          game.reloadLevelsMap();
+          switch (gameOverType) {
+            case GameOverType.victory:
+              final Map<String, dynamic> data = {
+                "action": "success"
+              };
+              const jsonEncoder = JsonEncoder();
+              final json = jsonEncoder.convert(data);
+              html.window.parent?.postMessage(json, "*");
+              break;
+            case GameOverType.defeat:
+              final Map<String, dynamic> data = {
+                "action": "failed"
+              };
+              const jsonEncoder = JsonEncoder();
+              final json = jsonEncoder.convert(data);
+              html.window.parent?.postMessage(json, "*");
+              break;
+          }
+          // game.reloadLevelsMap();
           removeFromParent();
         },
         position: backgroundImage.position,
