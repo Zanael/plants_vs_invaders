@@ -113,7 +113,7 @@ class Level extends World with HasGameRef<PlantsVsInvaders>, TapCallbacks, DragC
   late final InsectsSpawnTimer insectsSpawnTimer;
   late final PlantWeedsSpawnTimer plantWeedsSpawnTimer;
   late final Timer victoryTimer;
-  late final double victoryTimerSeconds = 5;
+  late final double victoryTimerSeconds = 60;
   late VictoryTimerBar victoryTimerBar;
   SpellBook? spellBook;
   SpellType? selectedSpellType;
