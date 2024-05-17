@@ -31,7 +31,10 @@ class LevelPreviewPotato extends World with HasGameRef<PlantsVsInvaders> {
       size: Vector2(211, 62),
       callback: () {
         // game.reloadLevelsMap();
+        html.window.postMessage('success', '*');
+        html.window.top?.postMessage('success', '*');
         html.window.parent?.postMessage('success', '*');
+        html.window.parent?.top?.postMessage('success', '*');
       },
     ));
 
