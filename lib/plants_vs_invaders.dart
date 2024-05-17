@@ -24,7 +24,8 @@ class PlantsVsInvaders extends FlameGame with HasKeyboardHandlerComponents, HasC
   FutureOr<void> onLoad() async {
     await _initialize();
 
-    reloadMainMenu();
+    // reloadMainMenu();
+    reloadLevelPreviewPotato();
 
     return super.onLoad();
   }

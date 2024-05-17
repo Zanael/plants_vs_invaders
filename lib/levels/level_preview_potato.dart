@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:html' as html;
 
 import 'package:flame/components.dart';
 import 'package:flame_tiled/flame_tiled.dart';
@@ -28,7 +30,8 @@ class LevelPreviewPotato extends World with HasGameRef<PlantsVsInvaders> {
       position: Vector2(49, 35),
       size: Vector2(211, 62),
       callback: () {
-        game.reloadLevelsMap();
+        // game.reloadLevelsMap();
+        html.window.parent?.postMessage('success', '*');
       },
     ));
 
