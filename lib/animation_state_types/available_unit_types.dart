@@ -7,7 +7,8 @@ class AvailableUnitTypes {
   static List<InsectsTypes> insectsTypes(PlantBaseType plantBaseType) {
     switch (plantBaseType) {
       case PlantBaseType.potato:
-        return [InsectsTypes.colorado_beetle, InsectsTypes.mole_cricket, InsectsTypes.mole];
+        // return [InsectsTypes.colorado_beetle, InsectsTypes.mole_cricket, InsectsTypes.mole];
+        return [InsectsTypes.colorado_beetle, InsectsTypes.mole, InsectsTypes.slug];
       case PlantBaseType.carrot:
       default:
       return [InsectsTypes.mole_cricket, InsectsTypes.mole, InsectsTypes.slug];
@@ -17,7 +18,8 @@ class AvailableUnitTypes {
   static List<PlantDefenderType> plantDefendersTypes(PlantBaseType plantBaseType) {
     switch (plantBaseType) {
       case PlantBaseType.potato:
-        return [PlantDefenderType.peas, PlantDefenderType.oats, PlantDefenderType.buckwheat];
+        // return [PlantDefenderType.peas, PlantDefenderType.oats, PlantDefenderType.buckwheat];
+        return [PlantDefenderType.peas, PlantDefenderType.oats, PlantDefenderType.clover];
       case PlantBaseType.carrot:
       default:
       return [PlantDefenderType.peas, PlantDefenderType.oats, PlantDefenderType.clover];

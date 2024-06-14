@@ -31,7 +31,7 @@ class EnergyCard extends SpriteComponent with HasGameRef<PlantsVsInvaders>, TapC
     final regular = TextPaint(
         style: const TextStyle(
           fontFamily: 'RubikBubbles',
-          fontSize: 14,
+          fontSize: 16,
           color: Color(0xFF726C60),
         ));
 
@@ -39,7 +39,7 @@ class EnergyCard extends SpriteComponent with HasGameRef<PlantsVsInvaders>, TapC
       text: price.toString(),
       textRenderer: regular,
       anchor: Anchor.topLeft,
-      position: Vector2(35, 100),
+      position: Vector2(160, 145),
     );
 
     add(textComponent);

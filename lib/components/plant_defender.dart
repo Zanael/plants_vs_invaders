@@ -46,7 +46,7 @@ class PlantDefender extends Plant with HasGameRef<PlantsVsInvaders>, CollisionCa
   late final RectangleHitbox hitbox;
 
   final PlantDefenderType plantDefenderType;
-  final double animationStepTime = 0.5;
+  final double animationStepTime = 0.15;
 
   late final SpriteAnimation idleAnimation;
   late final SpriteAnimation hitAnimation;
@@ -70,9 +70,8 @@ class PlantDefender extends Plant with HasGameRef<PlantsVsInvaders>, CollisionCa
   @override
   FutureOr<void> onLoad() {
     _loadAllAnimations();
+    _addHitBox();
     _addCharacterBar();
-    hitbox = RectangleHitbox();
-    add(hitbox);
 
     plantPosition.x = position.x;
     plantPosition.y = position.y;
@@ -87,8 +86,8 @@ class PlantDefender extends Plant with HasGameRef<PlantsVsInvaders>, CollisionCa
             damage: BulletDamage.damage(plantDefenderType),
             moveSpeed: BulletSpeed.speed(plantDefenderType) * bulletSpeedCoefficient,
             position: Vector2(
-              plantPosition.x + 45,
-              plantPosition.y + 25,
+              plantPosition.x + 50,
+              plantPosition.y,
             ),
           ));
         }));
@@ -117,19 +116,19 @@ class PlantDefender extends Plant with HasGameRef<PlantsVsInvaders>, CollisionCa
   void _loadAllAnimations() {
     switch (plantDefenderType) {
       case PlantDefenderType.peas:
-        idleAnimation = _spriteAnimation(PlantDefenderType.peas, 'idle', 3);
+        idleAnimation = _spriteAnimation(PlantDefenderType.peas, 'idle', 10);
         hitAnimation = _spriteAnimation(PlantDefenderType.peas, 'hit', 1);
         break;
       case PlantDefenderType.oats:
-        idleAnimation = _spriteAnimation(PlantDefenderType.oats, 'idle', 3);
+        idleAnimation = _spriteAnimation(PlantDefenderType.oats, 'idle', 10);
         hitAnimation = _spriteAnimation(PlantDefenderType.oats, 'hit', 1);
         break;
       case PlantDefenderType.buckwheat:
-        idleAnimation = _spriteAnimation(PlantDefenderType.buckwheat, 'idle', 3);
+        idleAnimation = _spriteAnimation(PlantDefenderType.buckwheat, 'idle', 10);
         hitAnimation = _spriteAnimation(PlantDefenderType.buckwheat, 'hit', 1);
         break;
       case PlantDefenderType.clover:
-        idleAnimation = _spriteAnimation(PlantDefenderType.clover, 'idle', 3);
+        idleAnimation = _spriteAnimation(PlantDefenderType.clover, 'idle', 10);
         hitAnimation = _spriteAnimation(PlantDefenderType.clover, 'hit', 1);
         break;
     }
@@ -142,13 +141,44 @@ class PlantDefender extends Plant with HasGameRef<PlantsVsInvaders>, CollisionCa
     current = PlantAnimationStateType.idle;
   }
 
+  void _addHitBox() {
+    switch (plantDefenderType) {
+      case PlantDefenderType.peas:
+        hitbox = RectangleHitbox(
+          position: Vector2(70, 0),
+          size: Vector2(125, 130),
+        );
+        break;
+      case PlantDefenderType.oats:
+        hitbox = RectangleHitbox(
+          position: Vector2(70, 0),
+          size: Vector2(125, 130),
+        );
+        break;
+      case PlantDefenderType.buckwheat:
+        hitbox = RectangleHitbox(
+          position: Vector2(70, 0),
+          size: Vector2(125, 130),
+        );
+        break;
+      case PlantDefenderType.clover:
+        hitbox = RectangleHitbox(
+          position: Vector2(70, 0),
+          size: Vector2(125, 130),
+        );
+        break;
+    }
+
+    add(hitbox);
+  }
+
   SpriteAnimation _spriteAnimation(PlantDefenderType plantDefenderType, String action, int amount) {
     return SpriteAnimation.fromFrameData(
       game.images.fromCache('levels/plants/defenders/${plantDefenderType.name}/${plantDefenderType.name}_$action.png'),
       SpriteAnimationData.sequenced(
         amount: amount,
         stepTime: animationStepTime,
-        textureSize: Vector2(70, 80),
+        textureSize: Vector2(960, 540),
       ),
     );
   }
@@ -166,8 +196,8 @@ class PlantDefender extends Plant with HasGameRef<PlantsVsInvaders>, CollisionCa
     characterBar = CharacterBar(
       color: CharacterBarColors.greenFront,
       backgroundColor: CharacterBarColors.greenBack,
-      position: Vector2(0, -10),
-      size: Vector2(size.x, 7),
+      position: Vector2(hitbox.position.x, hitbox.position.y),
+      size: Vector2(hitbox.size.x, 5),
       progress: health / totalHealth,
     );
     add(characterBar);
@@ -178,8 +208,8 @@ class PlantDefender extends Plant with HasGameRef<PlantsVsInvaders>, CollisionCa
     characterBar = CharacterBar(
       color: CharacterBarColors.greenFront,
       backgroundColor: CharacterBarColors.greenBack,
-      position: Vector2(0, -10),
-      size: Vector2(size.x, 7),
+      position: Vector2(hitbox.position.x, hitbox.position.y),
+      size: Vector2(hitbox.size.x, 5),
       progress: health / totalHealth,
     );
     add(characterBar);
@@ -266,8 +296,8 @@ class PlantDefender extends Plant with HasGameRef<PlantsVsInvaders>, CollisionCa
   void _addPotionIcon(SpellType spellType) {
     add(Potion(
       spellType: spellType,
-      position: Vector2(54, -16),
-      size: Vector2.all(32),
+      position: Vector2(55, -15),
+      size: Vector2.all(70),
     ));
   }
 }

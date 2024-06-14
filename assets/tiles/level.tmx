@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="35" height="26" tilewidth="32" tileheight="32" infinite="0" nextlayerid="25" nextobjectid="84">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="64" height="36" tilewidth="30" tileheight="30" infinite="0" nextlayerid="25" nextobjectid="89">
  <imagelayer id="2" name="background" locked="1">
-  <image source="../images/levels/background/level_background.png" width="1120" height="832"/>
+  <image source="../images/levels/background/level_background.png" width="1920" height="1080"/>
  </imagelayer>
  <imagelayer id="3" name="field" locked="1" offsetx="0" offsety="299">
   <image source="../images/levels/fields/potato.png" width="103" height="340"/>
@@ -27,7 +27,7 @@
  <imagelayer id="16" name="energy_card" locked="1" offsetx="812" offsety="14">
   <image source="../images/levels/energy_cards/plane.png" width="86" height="129"/>
  </imagelayer>
- <imagelayer id="17" name="sun" locked="1" offsetx="914" offsety="14">
+ <imagelayer id="17" name="sun" locked="1" offsetx="1679" offsety="44">
   <image source="../images/levels/sun/sun_clouds.png" width="155" height="120"/>
  </imagelayer>
  <imagelayer id="23" name="sun_generator" locked="1" offsetx="44" offsety="210">
@@ -42,373 +42,373 @@
  <imagelayer id="22" name="resources_energy" locked="1" offsetx="74" offsety="713">
   <image source="../images/levels/resources/energy.png" width="66" height="66"/>
  </imagelayer>
- <objectgroup id="5" name="board" locked="1">
-  <object id="1" type="cell" x="127" y="179" width="100" height="120">
+ <objectgroup id="5" name="board" visible="0" locked="1">
+  <object id="1" name="0,0" type="cell" x="468" y="234" width="154" height="154">
    <properties>
     <property name="column" type="int" value="0"/>
     <property name="row" type="int" value="0"/>
    </properties>
   </object>
-  <object id="12" type="cell" x="127" y="299" width="100" height="120">
+  <object id="12" name="0,1" type="cell" x="468" y="388" width="154" height="154">
    <properties>
     <property name="column" type="int" value="0"/>
     <property name="row" type="int" value="1"/>
    </properties>
   </object>
-  <object id="21" type="cell" x="127" y="419" width="100" height="120">
+  <object id="21" name="0,2" type="cell" x="468" y="542" width="154" height="154">
    <properties>
     <property name="column" type="int" value="0"/>
     <property name="row" type="int" value="2"/>
    </properties>
   </object>
-  <object id="30" type="cell" x="127" y="539" width="100" height="120">
+  <object id="30" name="0,3" type="cell" x="468" y="696" width="154" height="154">
    <properties>
     <property name="column" type="int" value="0"/>
     <property name="row" type="int" value="3"/>
    </properties>
   </object>
-  <object id="39" type="cell" x="127" y="659" width="100" height="120">
+  <object id="39" name="0,4" type="cell" x="468" y="850" width="154" height="154">
    <properties>
     <property name="column" type="int" value="0"/>
     <property name="row" type="int" value="4"/>
    </properties>
   </object>
-  <object id="3" type="cell" x="227" y="179" width="100" height="120">
+  <object id="3" name="1,0" type="cell" x="622" y="234" width="154" height="154">
    <properties>
     <property name="column" type="int" value="1"/>
     <property name="row" type="int" value="0"/>
    </properties>
   </object>
-  <object id="13" type="cell" x="227" y="299" width="100" height="120">
+  <object id="13" name="1,1" type="cell" x="622" y="388" width="154" height="154">
    <properties>
     <property name="column" type="int" value="1"/>
     <property name="row" type="int" value="1"/>
    </properties>
   </object>
-  <object id="22" type="cell" x="227" y="419" width="100" height="120">
+  <object id="22" name="1,2" type="cell" x="622" y="542" width="154" height="154">
    <properties>
     <property name="column" type="int" value="1"/>
     <property name="row" type="int" value="2"/>
    </properties>
   </object>
-  <object id="31" type="cell" x="227" y="539" width="100" height="120">
+  <object id="31" name="1,3" type="cell" x="622" y="696" width="154" height="154">
    <properties>
     <property name="column" type="int" value="1"/>
     <property name="row" type="int" value="3"/>
    </properties>
   </object>
-  <object id="40" type="cell" x="227" y="659" width="100" height="120">
+  <object id="40" name="1,4" type="cell" x="622" y="850" width="154" height="154">
    <properties>
     <property name="column" type="int" value="1"/>
     <property name="row" type="int" value="4"/>
    </properties>
   </object>
-  <object id="4" type="cell" x="327" y="179" width="100" height="120">
+  <object id="4" name="2,0" type="cell" x="776" y="234" width="154" height="154">
    <properties>
     <property name="column" type="int" value="2"/>
     <property name="row" type="int" value="0"/>
    </properties>
   </object>
-  <object id="14" type="cell" x="327" y="299" width="100" height="120">
+  <object id="14" name="2,1" type="cell" x="776" y="388" width="154" height="154">
    <properties>
     <property name="column" type="int" value="2"/>
     <property name="row" type="int" value="1"/>
    </properties>
   </object>
-  <object id="23" type="cell" x="327" y="419" width="100" height="120">
+  <object id="23" name="2,2" type="cell" x="776" y="542" width="154" height="154">
    <properties>
     <property name="column" type="int" value="2"/>
     <property name="row" type="int" value="2"/>
    </properties>
   </object>
-  <object id="32" type="cell" x="327" y="539" width="100" height="120">
+  <object id="32" name="2,3" type="cell" x="776" y="696" width="154" height="154">
    <properties>
     <property name="column" type="int" value="2"/>
     <property name="row" type="int" value="3"/>
    </properties>
   </object>
-  <object id="41" type="cell" x="327" y="659" width="100" height="120">
+  <object id="41" name="2,4" type="cell" x="776" y="850" width="154" height="154">
    <properties>
     <property name="column" type="int" value="2"/>
     <property name="row" type="int" value="4"/>
    </properties>
   </object>
-  <object id="5" type="cell" x="427" y="179" width="100" height="120">
+  <object id="5" name="3,0" type="cell" x="930" y="234" width="154" height="154">
    <properties>
     <property name="column" type="int" value="3"/>
     <property name="row" type="int" value="0"/>
    </properties>
   </object>
-  <object id="15" type="cell" x="427" y="299" width="100" height="120">
+  <object id="15" name="3,1" type="cell" x="930" y="388" width="154" height="154">
    <properties>
     <property name="column" type="int" value="3"/>
     <property name="row" type="int" value="1"/>
    </properties>
   </object>
-  <object id="24" type="cell" x="427" y="419" width="100" height="120">
+  <object id="24" name="3,2" type="cell" x="930" y="542" width="154" height="154">
    <properties>
     <property name="column" type="int" value="3"/>
     <property name="row" type="int" value="2"/>
    </properties>
   </object>
-  <object id="33" type="cell" x="427" y="539" width="100" height="120">
+  <object id="33" name="3,3" type="cell" x="930" y="696" width="154" height="154">
    <properties>
     <property name="column" type="int" value="3"/>
     <property name="row" type="int" value="3"/>
    </properties>
   </object>
-  <object id="42" type="cell" x="427" y="659" width="100" height="120">
+  <object id="42" name="3,4" type="cell" x="930" y="850" width="154" height="154">
    <properties>
     <property name="column" type="int" value="3"/>
     <property name="row" type="int" value="4"/>
    </properties>
   </object>
-  <object id="6" type="cell" x="527" y="179" width="100" height="120">
+  <object id="6" name="4,0" type="cell" x="1084" y="234" width="154" height="154">
    <properties>
     <property name="column" type="int" value="4"/>
     <property name="row" type="int" value="0"/>
    </properties>
   </object>
-  <object id="16" type="cell" x="527" y="299" width="100" height="120">
+  <object id="16" name="4,1" type="cell" x="1084" y="388" width="154" height="154">
    <properties>
     <property name="column" type="int" value="4"/>
     <property name="row" type="int" value="1"/>
    </properties>
   </object>
-  <object id="25" type="cell" x="527" y="419" width="100" height="120">
+  <object id="25" name="4,2" type="cell" x="1084" y="542" width="154" height="154">
    <properties>
     <property name="column" type="int" value="4"/>
     <property name="row" type="int" value="2"/>
    </properties>
   </object>
-  <object id="34" type="cell" x="527" y="539" width="100" height="120">
+  <object id="34" name="4,3" type="cell" x="1084" y="696" width="154" height="154">
    <properties>
     <property name="column" type="int" value="4"/>
     <property name="row" type="int" value="3"/>
    </properties>
   </object>
-  <object id="43" type="cell" x="527" y="659" width="100" height="120">
+  <object id="43" name="4,4" type="cell" x="1084" y="850" width="154" height="154">
    <properties>
     <property name="column" type="int" value="4"/>
     <property name="row" type="int" value="4"/>
    </properties>
   </object>
-  <object id="7" type="cell" x="627" y="179" width="100" height="120">
+  <object id="7" name="5,0" type="cell" x="1238" y="234" width="154" height="154">
    <properties>
     <property name="column" type="int" value="5"/>
     <property name="row" type="int" value="0"/>
    </properties>
   </object>
-  <object id="17" type="cell" x="627" y="299" width="100" height="120">
+  <object id="17" name="5,1" type="cell" x="1238" y="388" width="154" height="154">
    <properties>
     <property name="column" type="int" value="5"/>
     <property name="row" type="int" value="1"/>
    </properties>
   </object>
-  <object id="26" type="cell" x="627" y="419" width="100" height="120">
+  <object id="26" name="5,2" type="cell" x="1238" y="542" width="154" height="154">
    <properties>
     <property name="column" type="int" value="5"/>
     <property name="row" type="int" value="2"/>
    </properties>
   </object>
-  <object id="35" type="cell" x="627" y="539" width="100" height="120">
+  <object id="35" name="5,3" type="cell" x="1238" y="696" width="154" height="154">
    <properties>
     <property name="column" type="int" value="5"/>
     <property name="row" type="int" value="3"/>
    </properties>
   </object>
-  <object id="44" type="cell" x="627" y="659" width="100" height="120">
+  <object id="44" name="5,4" type="cell" x="1238" y="850" width="154" height="154">
    <properties>
     <property name="column" type="int" value="5"/>
     <property name="row" type="int" value="4"/>
    </properties>
   </object>
-  <object id="8" type="cell" x="727" y="179" width="100" height="120">
+  <object id="8" name="6,0" type="cell" x="1392" y="234" width="154" height="154">
    <properties>
     <property name="column" type="int" value="6"/>
     <property name="row" type="int" value="0"/>
    </properties>
   </object>
-  <object id="18" type="cell" x="727" y="299" width="100" height="120">
+  <object id="18" name="6,1" type="cell" x="1392" y="388" width="154" height="154">
    <properties>
     <property name="column" type="int" value="6"/>
     <property name="row" type="int" value="1"/>
    </properties>
   </object>
-  <object id="27" type="cell" x="727" y="419" width="100" height="120">
+  <object id="27" name="6,2" type="cell" x="1392" y="542" width="154" height="154">
    <properties>
     <property name="column" type="int" value="6"/>
     <property name="row" type="int" value="2"/>
    </properties>
   </object>
-  <object id="36" type="cell" x="727" y="539" width="100" height="120">
+  <object id="36" name="6,3" type="cell" x="1392" y="696" width="154" height="154">
    <properties>
     <property name="column" type="int" value="6"/>
     <property name="row" type="int" value="3"/>
    </properties>
   </object>
-  <object id="45" type="cell" x="727" y="659" width="100" height="120">
+  <object id="45" name="6,4" type="cell" x="1392" y="850" width="154" height="154">
    <properties>
     <property name="column" type="int" value="6"/>
     <property name="row" type="int" value="4"/>
    </properties>
   </object>
-  <object id="9" type="cell" x="827" y="179" width="100" height="120">
+  <object id="9" name="7,0" type="cell" x="1546" y="234" width="154" height="154">
    <properties>
     <property name="column" type="int" value="7"/>
     <property name="row" type="int" value="0"/>
    </properties>
   </object>
-  <object id="19" type="cell" x="827" y="299" width="100" height="120">
+  <object id="19" name="7,1" type="cell" x="1546" y="388" width="154" height="154">
    <properties>
     <property name="column" type="int" value="7"/>
     <property name="row" type="int" value="1"/>
    </properties>
   </object>
-  <object id="28" type="cell" x="827" y="419" width="100" height="120">
+  <object id="28" name="7,2" type="cell" x="1546" y="542" width="154" height="154">
    <properties>
     <property name="column" type="int" value="7"/>
     <property name="row" type="int" value="2"/>
    </properties>
   </object>
-  <object id="37" type="cell" x="827" y="539" width="100" height="120">
+  <object id="37" name="7,3" type="cell" x="1546" y="696" width="154" height="154">
    <properties>
     <property name="column" type="int" value="7"/>
     <property name="row" type="int" value="3"/>
    </properties>
   </object>
-  <object id="46" type="cell" x="827" y="659" width="100" height="120">
+  <object id="46" name="7,4" type="cell" x="1546" y="850" width="154" height="154">
    <properties>
     <property name="column" type="int" value="7"/>
     <property name="row" type="int" value="4"/>
    </properties>
   </object>
-  <object id="10" type="cell" x="927" y="179" width="100" height="120">
+  <object id="10" name="8,0" type="cell" x="1700" y="234" width="154" height="154">
    <properties>
     <property name="column" type="int" value="8"/>
     <property name="row" type="int" value="0"/>
    </properties>
   </object>
-  <object id="11" type="cell" x="927" y="299" width="100" height="120">
+  <object id="11" name="8,1" type="cell" x="1700" y="388" width="154" height="154">
    <properties>
     <property name="column" type="int" value="8"/>
     <property name="row" type="int" value="1"/>
    </properties>
   </object>
-  <object id="20" type="cell" x="927" y="419" width="100" height="120">
+  <object id="20" name="8,2" type="cell" x="1700" y="542" width="154" height="154">
    <properties>
     <property name="column" type="int" value="8"/>
     <property name="row" type="int" value="2"/>
    </properties>
   </object>
-  <object id="29" type="cell" x="927" y="539" width="100" height="120">
+  <object id="29" name="8,3" type="cell" x="1700" y="696" width="154" height="154">
    <properties>
     <property name="column" type="int" value="8"/>
     <property name="row" type="int" value="3"/>
    </properties>
   </object>
-  <object id="38" type="cell" x="927" y="659" width="100" height="120">
+  <object id="38" name="8,4" type="cell" x="1700" y="850" width="154" height="154">
    <properties>
     <property name="column" type="int" value="8"/>
     <property name="row" type="int" value="4"/>
    </properties>
   </object>
  </objectgroup>
- <objectgroup id="6" name="spawn_points" locked="1">
-  <object id="47" type="Player" x="240" y="326" width="71" height="86"/>
-  <object id="48" type="Insects" x="1120" y="208" width="70" height="80">
+ <objectgroup id="6" name="spawn_points" visible="0" locked="1">
+  <object id="47" type="Player" x="562" y="390" width="265" height="150"/>
+  <object id="48" type="Insects" x="1920" y="249" width="265" height="150">
    <properties>
     <property name="row" type="int" value="0"/>
    </properties>
   </object>
-  <object id="71" type="Plane" x="-150" y="208" width="150" height="80">
+  <object id="71" type="Plane" x="-300" y="234" width="265" height="150">
    <properties>
     <property name="row" type="int" value="0"/>
    </properties>
   </object>
-  <object id="50" type="Insects" x="1120" y="329" width="70" height="80">
+  <object id="50" type="Insects" x="1920" y="403" width="265" height="150">
    <properties>
     <property name="row" type="int" value="1"/>
    </properties>
   </object>
-  <object id="72" type="Plane" x="-150" y="329" width="150" height="80">
+  <object id="72" type="Plane" x="-300" y="388" width="265" height="150">
    <properties>
     <property name="row" type="int" value="1"/>
    </properties>
   </object>
-  <object id="51" type="Insects" x="1120" y="449" width="70" height="80">
+  <object id="51" type="Insects" x="1920" y="557" width="265" height="150">
    <properties>
     <property name="row" type="int" value="2"/>
    </properties>
   </object>
-  <object id="73" type="Plane" x="-150" y="448" width="150" height="80">
+  <object id="73" type="Plane" x="-300" y="542" width="265" height="150">
    <properties>
     <property name="row" type="int" value="2"/>
    </properties>
   </object>
-  <object id="52" type="Insects" x="1120" y="569" width="70" height="80">
+  <object id="52" type="Insects" x="1920" y="711" width="265" height="150">
    <properties>
     <property name="row" type="int" value="3"/>
    </properties>
   </object>
-  <object id="75" type="Plane" x="-150" y="569" width="150" height="80">
+  <object id="75" type="Plane" x="-300" y="696" width="265" height="150">
    <properties>
     <property name="row" type="int" value="3"/>
    </properties>
   </object>
-  <object id="53" type="Insects" x="1120" y="689" width="70" height="80">
+  <object id="53" type="Insects" x="1920" y="865" width="265" height="150">
    <properties>
     <property name="row" type="int" value="4"/>
    </properties>
   </object>
-  <object id="78" type="Plane" x="-150" y="689" width="150" height="80">
+  <object id="78" type="Plane" x="-300" y="850" width="265" height="150">
    <properties>
     <property name="row" type="int" value="4"/>
    </properties>
   </object>
  </objectgroup>
- <objectgroup id="7" name="interface" locked="1">
+ <objectgroup id="7" name="interface" visible="0" locked="1">
   <object id="54" type="Field" x="0" y="299" width="103" height="340"/>
-  <object id="55" type="ScoreTable" x="11" y="7" width="167" height="95"/>
-  <object id="57" type="MenuButton" x="20" y="106" width="149" height="34"/>
-  <object id="58" type="SunCard" x="202" y="14" width="91" height="129">
+  <object id="55" type="ScoreTable" x="0" y="0" width="365" height="200"/>
+  <object id="57" type="MenuButton" x="0" y="100" width="365" height="200"/>
+  <object id="58" type="SunCard" x="360" y="0" width="350" height="200">
    <properties>
     <property name="order" type="int" value="0"/>
    </properties>
   </object>
-  <object id="59" type="SunCard" x="308" y="14" width="91" height="129">
+  <object id="59" type="SunCard" x="610" y="0" width="350" height="200">
    <properties>
     <property name="order" type="int" value="1"/>
    </properties>
   </object>
-  <object id="60" type="SunCard" x="414" y="14" width="91" height="129">
+  <object id="60" type="SunCard" x="860" y="0" width="350" height="200">
    <properties>
     <property name="order" type="int" value="2"/>
    </properties>
   </object>
-  <object id="61" type="SunCard" x="520" y="14" width="91" height="129">
+  <object id="61" type="SunCard" x="910" y="0" width="350" height="200">
    <properties>
     <property name="order" type="int" value="3"/>
    </properties>
   </object>
-  <object id="62" type="EnergyCard" x="812" y="14" width="86" height="129">
+  <object id="62" type="EnergyCard" x="1240" y="0" width="350" height="200">
    <properties>
     <property name="order" type="int" value="0"/>
    </properties>
   </object>
  </objectgroup>
  <objectgroup id="18" name="game_objects" locked="1">
-  <object id="63" type="Sun" x="914" y="14" width="155" height="120"/>
-  <object id="66" type="SunGenerator" x="44" y="210" width="70" height="80"/>
-  <object id="67" type="WindGenerator" x="44" y="690" width="70" height="80"/>
-  <object id="69" type="SunResource" x="74" y="233" width="66" height="66"/>
-  <object id="70" type="EnergyResource" x="74" y="713" width="66" height="66"/>
+  <object id="63" type="Sun" x="1599" y="30" width="320" height="180"/>
+  <object id="66" type="SunGenerator" x="320" y="270" width="265" height="150"/>
+  <object id="67" type="WindGenerator" x="-100" y="680" width="796" height="450"/>
+  <object id="69" type="SunResource" x="400" y="320" width="160" height="90"/>
+  <object id="70" type="EnergyResource" x="260" y="920" width="265" height="150"/>
  </objectgroup>
- <objectgroup id="24" name="collisions" locked="1">
-  <object id="79" x="117" y="0" width="10" height="832"/>
-  <object id="83" type="EndGame" x="107" y="0" width="10" height="832"/>
-  <object id="80" x="1027" y="0" width="10" height="832"/>
-  <object id="81" x="0" y="169" width="1120" height="10"/>
-  <object id="82" x="0" y="779" width="1120" height="10"/>
+ <objectgroup id="24" name="collisions" visible="0" locked="1">
+  <object id="79" x="458" y="0" width="10" height="1080"/>
+  <object id="83" type="EndGame" x="448" y="0" width="10" height="1080"/>
+  <object id="80" x="1860" y="0" width="10" height="1080"/>
+  <object id="81" x="0" y="223" width="1920" height="10"/>
+  <object id="82" x="0" y="1008" width="1920" height="10"/>
  </objectgroup>
 </map>

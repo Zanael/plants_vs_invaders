@@ -19,9 +19,9 @@ class WindGenerator extends SpriteAnimationComponent with HasGameRef<PlantsVsInv
     animation = SpriteAnimation.fromFrameData(
       game.images.fromCache('levels/wind_generator/wind_generator_idle.png'),
       SpriteAnimationData.sequenced(
-        amount: 3,
+        amount: 6,
         stepTime: animationStepTime,
-        textureSize: Vector2(70, 80),
+        textureSize: Vector2(960, 540),
       ),
     );
     return super.onLoad();

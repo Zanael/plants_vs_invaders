@@ -37,7 +37,7 @@ class SunCard extends SpriteComponent with HasGameRef<PlantsVsInvaders> {
     final regular = TextPaint(
         style: const TextStyle(
       fontFamily: 'RubikBubbles',
-      fontSize: 14,
+      fontSize: 16,
       color: Color(0xFFAC590D),
     ));
 
@@ -45,7 +45,7 @@ class SunCard extends SpriteComponent with HasGameRef<PlantsVsInvaders> {
       text: price.toString(),
       textRenderer: regular,
       anchor: Anchor.topLeft,
-      position: Vector2(42, 98),
+      position: Vector2(160, 145),
     );
 
     add(textComponent);

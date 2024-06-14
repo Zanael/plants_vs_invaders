@@ -26,9 +26,10 @@ class Player extends SpriteAnimationGroupComponent
     required position,
   }) : super(
           position: position,
+          size: Vector2(265, 150),
         );
 
-  final double animationStepTime = 0.1;
+  final double animationStepTime = 0.05;
 
   late final SpriteAnimation idleLeftAnimation;
   late final SpriteAnimation idleUpAnimation;
@@ -91,8 +92,7 @@ class Player extends SpriteAnimationGroupComponent
     _loadAllAnimations();
     // _addCharacterBar();
     startingPosition = Vector2(position.x, position.y);
-    hitbox = RectangleHitbox();
-    add(hitbox);
+    _addHitBox();
 
     return super.onLoad();
   }
@@ -151,25 +151,25 @@ class Player extends SpriteAnimationGroupComponent
     idleRightAnimation = _spriteAnimation('idle', 'right', 1);
     idleDownAnimation = _spriteAnimation('idle', 'down', 1);
 
-    runLeftAnimation = _spriteAnimation('run', 'left', 2);
-    runUpAnimation = _spriteAnimation('run', 'up', 2);
-    runRightAnimation = _spriteAnimation('run', 'right', 2);
-    runDownAnimation = _spriteAnimation('run', 'down', 2);
+    runLeftAnimation = _spriteAnimation('run', 'left', 13);
+    runUpAnimation = _spriteAnimation('run', 'up', 14);
+    runRightAnimation = _spriteAnimation('run', 'right', 14);
+    runDownAnimation = _spriteAnimation('run', 'down', 14);
 
-    healLeftAnimation = _spriteAnimation('heal', 'left', 1);
-    healUpAnimation = _spriteAnimation('heal', 'up', 1);
-    healRightAnimation = _spriteAnimation('heal', 'right', 1);
-    healDownAnimation = _spriteAnimation('heal', 'down', 1);
+    healLeftAnimation = _spriteAnimation('heal', 'left', 17);
+    healUpAnimation = _spriteAnimation('heal', 'up', 17);
+    healRightAnimation = _spriteAnimation('heal', 'right', 17);
+    healDownAnimation = _spriteAnimation('heal', 'down', 17);
 
-    attackInsetsLeftAnimation = _spriteAnimation('attack/insects', 'left', 1);
-    attackInsetsUpAnimation = _spriteAnimation('attack/insects', 'up', 1);
-    attackInsetsRightAnimation = _spriteAnimation('attack/insects', 'right', 1);
-    attackInsetsDownAnimation = _spriteAnimation('attack/insects', 'down', 1);
+    attackInsetsLeftAnimation = _spriteAnimation('attack/insects', 'left', 10);
+    attackInsetsUpAnimation = _spriteAnimation('attack/insects', 'up', 11);
+    attackInsetsRightAnimation = _spriteAnimation('attack/insects', 'right', 11);
+    attackInsetsDownAnimation = _spriteAnimation('attack/insects', 'down', 11);
 
-    attackPlantsLeftAnimation = _spriteAnimation('attack/plants', 'left', 1);
-    attackPlantsUpAnimation = _spriteAnimation('attack/plants', 'up', 1);
-    attackPlantsRightAnimation = _spriteAnimation('attack/plants', 'right', 1);
-    attackPlantsDownAnimation = _spriteAnimation('attack/plants', 'down', 1);
+    attackPlantsLeftAnimation = _spriteAnimation('attack/plants', 'left', 10);
+    attackPlantsUpAnimation = _spriteAnimation('attack/plants', 'up', 11);
+    attackPlantsRightAnimation = _spriteAnimation('attack/plants', 'right', 11);
+    attackPlantsDownAnimation = _spriteAnimation('attack/plants', 'down', 11);
 
     animations = {
       PlayerAnimationStateType.idleLeft: idleLeftAnimation,
@@ -203,9 +203,17 @@ class Player extends SpriteAnimationGroupComponent
       SpriteAnimationData.sequenced(
         amount: amount,
         stepTime: animationStepTime,
-        textureSize: Vector2(71, 86),
+        textureSize: Vector2(960, 540),
       ),
     );
+  }
+
+  void _addHitBox() {
+    hitbox = RectangleHitbox(
+      position: Vector2(70,10),
+      size: Vector2(125, 130),
+    );
+    add(hitbox);
   }
 
   void _updatePlayerAnimationStateType() {

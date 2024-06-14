@@ -18,8 +18,8 @@ class LevelPreviewPotato extends World with HasGameRef<PlantsVsInvaders> {
 
     // Играть
     add(TappableRegion(
-      position: Vector2(421, 718),
-      size: Vector2(280, 64),
+      position: Vector2(760, 930),
+      size: Vector2(430, 120),
       callback: () {
         game.reloadLevelPotato();
       },
@@ -27,8 +27,8 @@ class LevelPreviewPotato extends World with HasGameRef<PlantsVsInvaders> {
 
     // Назад
     add(TappableRegion(
-      position: Vector2(49, 35),
-      size: Vector2(211, 62),
+      position: Vector2(45, 35),
+      size: Vector2(250, 70),
       callback: () {
         // game.reloadLevelsMap();
 

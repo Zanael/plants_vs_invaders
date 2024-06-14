@@ -11,11 +11,12 @@ class PlaneAirForce extends SpriteAnimationGroupComponent with HasGameRef<Plants
     required position,
     // required size,
   }) : super(
-    position: position,
-    size: Vector2(150, 80),
+    position: Vector2(position.x, position.y - 100),
+    size: Vector2(530, 300),
+    priority: 1000,
   );
 
-  final double animationStepTime = 1;
+  final double animationStepTime = 0.1;
 
   late final SpriteAnimation idleAnimation;
 
@@ -50,7 +51,7 @@ class PlaneAirForce extends SpriteAnimationGroupComponent with HasGameRef<Plants
   }
 
   void _loadAllAnimations() {
-    idleAnimation = _spriteAnimation('plane', 1);
+    idleAnimation = _spriteAnimation('plane', 11);
 
     animations = {
       PlaneAnimationStateType.idle: idleAnimation,
@@ -65,7 +66,7 @@ class PlaneAirForce extends SpriteAnimationGroupComponent with HasGameRef<Plants
       SpriteAnimationData.sequenced(
         amount: amount,
         stepTime: animationStepTime,
-        textureSize: Vector2(150, 80),
+        textureSize: Vector2(960, 540),
       ),
     );
   }

@@ -21,7 +21,7 @@ class SunGenerator extends SpriteAnimationComponent with HasGameRef<PlantsVsInva
       SpriteAnimationData.sequenced(
         amount: 1,
         stepTime: animationStepTime,
-        textureSize: Vector2(70, 80),
+        textureSize: Vector2(960, 540),
       ),
     );
     return super.onLoad();

@@ -30,14 +30,14 @@ class ScoreTable extends SpriteComponent with HasGameRef<PlantsVsInvaders> {
     final sunTextStyle = TextPaint(
         style: const TextStyle(
           fontFamily: 'RubikBubbles',
-          fontSize: 20,
+          fontSize: 24,
           color: Color(0xFFAC590D),
         ));
 
     final energyTextStyle = TextPaint(
         style: const TextStyle(
           fontFamily: 'RubikBubbles',
-          fontSize: 20,
+          fontSize: 24,
           color: Color(0xFF726C60),
         ));
 
@@ -45,14 +45,14 @@ class ScoreTable extends SpriteComponent with HasGameRef<PlantsVsInvaders> {
       text: sunResources.toString(),
       textRenderer: sunTextStyle,
       anchor: Anchor.topLeft,
-      position: Vector2(69, 24),
+      position: Vector2(160, 70),
     );
 
     final energyTextComponent = TextComponent(
       text: energyResources.toString(),
       textRenderer: energyTextStyle,
       anchor: Anchor.topLeft,
-      position: Vector2(69, 58),
+      position: Vector2(160, 105),
     );
 
     add(sunTextComponent);

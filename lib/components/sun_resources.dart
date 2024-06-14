@@ -17,7 +17,10 @@ class SunResources extends SpriteComponent with HasGameRef<PlantsVsInvaders> {
   @override
   FutureOr<void> onLoad() {
     sprite = Sprite(game.images.fromCache('levels/resources/sun.png'));
-    add(RectangleHitbox());
+    add(RectangleHitbox(
+      position: Vector2(55, 25),
+      size: Vector2(40, 40),
+    ));
     return super.onLoad();
   }
 }

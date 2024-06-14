@@ -58,9 +58,8 @@ class PlantWeed extends Plant with HasGameRef<PlantsVsInvaders>, CollisionCallba
   @override
   FutureOr<void> onLoad() {
     _loadAllAnimations();
+    _addHitBox();
     _addCharacterBar();
-    hitbox = RectangleHitbox();
-    add(hitbox);
 
     return super.onLoad();
   }
@@ -83,23 +82,23 @@ class PlantWeed extends Plant with HasGameRef<PlantsVsInvaders>, CollisionCallba
   void _loadAllAnimations() {
     switch (plantWeedType) {
       case PlantWeedType.bindweed:
-        idleAnimation = _spriteAnimation(PlantWeedType.bindweed, 'idle', 3);
+        idleAnimation = _spriteAnimation(PlantWeedType.bindweed, 'idle', 1);
         hitAnimation = _spriteAnimation(PlantWeedType.bindweed, 'hit', 1);
         break;
       case PlantWeedType.dandelion:
-        idleAnimation = _spriteAnimation(PlantWeedType.dandelion, 'idle', 3);
+        idleAnimation = _spriteAnimation(PlantWeedType.dandelion, 'idle', 1);
         hitAnimation = _spriteAnimation(PlantWeedType.dandelion, 'hit', 1);
         break;
       case PlantWeedType.hogweed:
-        idleAnimation = _spriteAnimation(PlantWeedType.hogweed, 'idle', 3);
+        idleAnimation = _spriteAnimation(PlantWeedType.hogweed, 'idle', 1);
         hitAnimation = _spriteAnimation(PlantWeedType.hogweed, 'hit', 1);
         break;
       case PlantWeedType.shepherds_purse:
-        idleAnimation = _spriteAnimation(PlantWeedType.shepherds_purse, 'idle', 3);
+        idleAnimation = _spriteAnimation(PlantWeedType.shepherds_purse, 'idle', 1);
         hitAnimation = _spriteAnimation(PlantWeedType.shepherds_purse, 'hit', 1);
         break;
       case PlantWeedType.wheatgrass:
-        idleAnimation = _spriteAnimation(PlantWeedType.wheatgrass, 'idle', 3);
+        idleAnimation = _spriteAnimation(PlantWeedType.wheatgrass, 'idle', 1);
         hitAnimation = _spriteAnimation(PlantWeedType.wheatgrass, 'hit', 1);
         break;
     }
@@ -112,13 +111,50 @@ class PlantWeed extends Plant with HasGameRef<PlantsVsInvaders>, CollisionCallba
     current = PlantAnimationStateType.idle;
   }
 
+  void _addHitBox() {
+    switch (plantWeedType) {
+      case PlantWeedType.bindweed:
+        hitbox = RectangleHitbox(
+          position: Vector2(70, 0),
+          size: Vector2(125, 130),
+        );
+        break;
+      case PlantWeedType.dandelion:
+        hitbox = RectangleHitbox(
+          position: Vector2(70, 0),
+          size: Vector2(125, 130),
+        );
+        break;
+      case PlantWeedType.hogweed:
+        hitbox = RectangleHitbox(
+          position: Vector2(70, 0),
+          size: Vector2(125, 130),
+        );
+        break;
+      case PlantWeedType.shepherds_purse:
+        hitbox = RectangleHitbox(
+          position: Vector2(70, 0),
+          size: Vector2(125, 130),
+        );
+        break;
+      case PlantWeedType.wheatgrass:
+        hitbox = RectangleHitbox(
+          position: Vector2(70, 0),
+          size: Vector2(125, 130),
+        );
+        break;
+    }
+
+    add(hitbox);
+  }
+
   SpriteAnimation _spriteAnimation(PlantWeedType plantWeedType, String action, int amount) {
     return SpriteAnimation.fromFrameData(
       game.images.fromCache('levels/plants/weeds/${plantWeedType.name}/${plantWeedType.name}_$action.png'),
       SpriteAnimationData.sequenced(
         amount: amount,
         stepTime: animationStepTime,
-        textureSize: Vector2(70, 80),
+        textureSize: Vector2(1920, 1080),
       ),
     );
   }
@@ -136,8 +172,8 @@ class PlantWeed extends Plant with HasGameRef<PlantsVsInvaders>, CollisionCallba
     characterBar = CharacterBar(
       color: CharacterBarColors.greenFront,
       backgroundColor: CharacterBarColors.greenBack,
-      position: Vector2(0, -10),
-      size: Vector2(size.x, 7),
+      position: Vector2(hitbox.position.x, hitbox.position.y),
+      size: Vector2(hitbox.size.x, 5),
       progress: health / totalHealth,
     );
     add(characterBar);
@@ -148,8 +184,8 @@ class PlantWeed extends Plant with HasGameRef<PlantsVsInvaders>, CollisionCallba
     characterBar = CharacterBar(
       color: CharacterBarColors.greenFront,
       backgroundColor: CharacterBarColors.greenBack,
-      position: Vector2(0, -10),
-      size: Vector2(size.x, 7),
+      position: Vector2(hitbox.position.x, hitbox.position.y),
+      size: Vector2(hitbox.size.x, 5),
       progress: health / totalHealth,
     );
     add(characterBar);

@@ -38,7 +38,7 @@ class SpellBook extends SpriteComponent with HasGameRef<PlantsVsInvaders> {
 
     // Закрыть
     add(TappableRegion(
-      position: Vector2(28, 16),
+      position: Vector2(480, 180),
       size: Vector2(27, 27),
       callback: () => onClose(),
     ));
@@ -47,22 +47,22 @@ class SpellBook extends SpriteComponent with HasGameRef<PlantsVsInvaders> {
 
     // Замедляющий
     add(TappableRegion(
-      position: Vector2(63, 127),
-      size: Vector2(232, 64),
+      position: Vector2(500, 300),
+      size: Vector2(400, 120),
       callback: () => onCircleBluePotion(),
     ));
 
     // Ослабляющий
     add(TappableRegion(
-      position: Vector2(63, 236),
-      size: Vector2(227, 64),
+      position: Vector2(500, 470),
+      size: Vector2(400, 120),
       callback: () => onCircleYellowPotion(),
     ));
 
     // Убивающий
     add(TappableRegion(
-      position: Vector2(63, 334),
-      size: Vector2(203, 64),
+      position: Vector2(500, 650),
+      size: Vector2(400, 110),
       callback: () => onCircleRedPotion(),
     ));
 
@@ -70,22 +70,22 @@ class SpellBook extends SpriteComponent with HasGameRef<PlantsVsInvaders> {
 
     // Ускоряющее атаку
     add(TappableRegion(
-      position: Vector2(369, 127),
-      size: Vector2(208, 64),
+      position: Vector2(1000, 300),
+      size: Vector2(400, 140),
       callback: () => onRectBluePotion(),
     ));
 
     // Защищающее
     add(TappableRegion(
-      position: Vector2(369, 263),
-      size: Vector2(221, 64),
+      position: Vector2(1000, 470),
+      size: Vector2(400, 110),
       callback: () => onRectYellowPotion(),
     ));
 
     // Лечащее
     add(TappableRegion(
-      position: Vector2(369, 342),
-      size: Vector2(170, 64),
+      position: Vector2(1000, 650),
+      size: Vector2(400, 110),
       callback: () => onRectRedPotion(),
     ));
 

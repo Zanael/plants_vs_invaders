@@ -113,7 +113,7 @@ class Level extends World with HasGameRef<PlantsVsInvaders>, TapCallbacks, DragC
   late final InsectsSpawnTimer insectsSpawnTimer;
   late final PlantWeedsSpawnTimer plantWeedsSpawnTimer;
   late final Timer victoryTimer;
-  late final double victoryTimerSeconds = 60;
+  late final double victoryTimerSeconds = 120;
   late VictoryTimerBar victoryTimerBar;
   SpellBook? spellBook;
   SpellType? selectedSpellType;
@@ -146,7 +146,7 @@ class Level extends World with HasGameRef<PlantsVsInvaders>, TapCallbacks, DragC
     _addEnergyCards();
     _addScoreTable();
     _addMenuButton();
-    _addField();
+    // _addField();
     _addSun(sunType: sunType);
     _addSunGenerator();
     _addWindGenerator();
@@ -449,8 +449,10 @@ class Level extends World with HasGameRef<PlantsVsInvaders>, TapCallbacks, DragC
                 boardMapSpawnPoint[rowIndex][columnIndex].position.y,
                 boardMapSpawnPoint[rowIndex][columnIndex].size.x,
                 boardMapSpawnPoint[rowIndex][columnIndex].size.y,
-              ).containsPoint(Vector2(position.x + 45, position.y + 65))) {
+              // ).containsPoint(Vector2(position.x + 45, position.y + 65))) {
+              ).containsPoint(Vector2(position.x + 175, position.y + 100))) {
                 // INFO: Проверяем центр карточки при ее размере 91x129.
+                // INFO: Проверяем центр карточки при ее размере 350x200 (-110x-20).
                 if (plantsBoard[rowIndex][columnIndex] == null) {
                   PlantDefender plantDefender = PlantDefender(
                     plantDefenderType: plantDefenderType,
@@ -463,10 +465,10 @@ class Level extends World with HasGameRef<PlantsVsInvaders>, TapCallbacks, DragC
                       plantsBoard[rowOnBoard][columnOnBoard] = null;
                     },
                     position: Vector2(
-                      boardMapSpawnPoint[rowIndex][columnIndex].position.x + 20,
-                      boardMapSpawnPoint[rowIndex][columnIndex].position.y + 30,
+                      boardMapSpawnPoint[rowIndex][columnIndex].position.x - 50,
+                      boardMapSpawnPoint[rowIndex][columnIndex].position.y + 15,
                     ),
-                    size: Vector2(70, 80),
+                    size: Vector2(265, 150),
                   );
                   plantsBoard[rowIndex][columnIndex] = plantDefender;
                   add(plantDefender);
@@ -644,10 +646,10 @@ class Level extends World with HasGameRef<PlantsVsInvaders>, TapCallbacks, DragC
         plantsBoard[rowOnBoard][columnOnBoard] = null;
       },
       position: Vector2(
-        spawnPoint.position.x + 20,
-        spawnPoint.position.y + 30,
+        spawnPoint.position.x - 50,
+        spawnPoint.position.y + 15,
       ),
-      size: Vector2(70, 80),
+      size: Vector2(265, 150),
     );
     plantsBoard[spawnPointRowIndex][spawnPointColumnIndex] = plantWeed;
     add(plantWeed);
@@ -732,7 +734,7 @@ class Level extends World with HasGameRef<PlantsVsInvaders>, TapCallbacks, DragC
 
     spellBook = null;
     spellBook = SpellBook(
-      position: Vector2(248, 181),
+      position: Vector2(0, 0),
       onCircleBluePotion: () {
         _closeSpellBook();
         selectedSpellType = SpellType.circleBluePotion;
@@ -791,10 +793,10 @@ class Level extends World with HasGameRef<PlantsVsInvaders>, TapCallbacks, DragC
 
             final planeCloud = PlaneCloud(
               position: Vector2(
-                boardMapSpawnPoint[rowIndex][columnIndex].position.x + 20,
-                boardMapSpawnPoint[rowIndex][columnIndex].position.y + 30,
+                boardMapSpawnPoint[rowIndex][columnIndex].position.x - 55,
+                boardMapSpawnPoint[rowIndex][columnIndex].position.y,
               ),
-              size: Vector2(70, 80),
+              size: Vector2(265, 150),
               spellType: selectedSpellType!,
               onClose: () {},
             );
@@ -869,8 +871,8 @@ class Level extends World with HasGameRef<PlantsVsInvaders>, TapCallbacks, DragC
       color: VictoryTimerBarColors.front,
       backgroundColor: VictoryTimerBarColors.back,
       borderColor: VictoryTimerBarColors.border,
-      position: Vector2(754, 810),
-      size: Vector2(249, 15),
+      position: Vector2(1500, 1040),
+      size: Vector2(250, 15),
       progress: 0,
     );
     add(victoryTimerBar);
@@ -886,8 +888,8 @@ class Level extends World with HasGameRef<PlantsVsInvaders>, TapCallbacks, DragC
       color: VictoryTimerBarColors.front,
       backgroundColor: VictoryTimerBarColors.back,
       borderColor: VictoryTimerBarColors.border,
-      position: Vector2(754, 810),
-      size: Vector2(249, 15),
+      position: Vector2(1500, 1040),
+      size: Vector2(250, 15),
       progress: progress,
     );
     add(victoryTimerBar);

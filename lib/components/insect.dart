@@ -66,10 +66,9 @@ class Insect extends SpriteAnimationGroupComponent with HasGameRef<PlantsVsInvad
   @override
   FutureOr<void> onLoad() {
     _loadAllAnimations();
-    _addCharacterBar();
     startingPosition = Vector2(position.x, position.y);
-    hitbox = RectangleHitbox();
-    add(hitbox);
+    _addHitBox();
+    _addCharacterBar();
 
     return super.onLoad();
   }
@@ -93,26 +92,26 @@ class Insect extends SpriteAnimationGroupComponent with HasGameRef<PlantsVsInvad
     switch (insectsType) {
       case InsectsTypes.colorado_beetle:
         idleAnimation = _spriteAnimation(InsectsTypes.colorado_beetle, 'idle', 1);
-        runAnimation = _spriteAnimation(InsectsTypes.colorado_beetle, 'run', 3);
-        attackAnimation = _spriteAnimation(InsectsTypes.colorado_beetle, 'attack', 3);
+        runAnimation = _spriteAnimation(InsectsTypes.colorado_beetle, 'run', 10);
+        attackAnimation = _spriteAnimation(InsectsTypes.colorado_beetle, 'attack', 1);
         hitAnimation = _spriteAnimation(InsectsTypes.colorado_beetle, 'hit', 1);
         break;
       case InsectsTypes.mole:
         idleAnimation = _spriteAnimation(InsectsTypes.mole, 'idle', 1);
-        runAnimation = _spriteAnimation(InsectsTypes.mole, 'run', 3);
-        attackAnimation = _spriteAnimation(InsectsTypes.mole, 'attack', 3);
+        runAnimation = _spriteAnimation(InsectsTypes.mole, 'run', 10);
+        attackAnimation = _spriteAnimation(InsectsTypes.mole, 'attack', 1);
         hitAnimation = _spriteAnimation(InsectsTypes.mole, 'hit', 1);
         break;
       case InsectsTypes.mole_cricket:
         idleAnimation = _spriteAnimation(InsectsTypes.mole_cricket, 'idle', 1);
-        runAnimation = _spriteAnimation(InsectsTypes.mole_cricket, 'run', 3);
-        attackAnimation = _spriteAnimation(InsectsTypes.mole_cricket, 'attack', 3);
+        runAnimation = _spriteAnimation(InsectsTypes.mole_cricket, 'run', 1);
+        attackAnimation = _spriteAnimation(InsectsTypes.mole_cricket, 'attack', 1);
         hitAnimation = _spriteAnimation(InsectsTypes.mole_cricket, 'hit', 1);
         break;
       case InsectsTypes.slug:
         idleAnimation = _spriteAnimation(InsectsTypes.slug, 'idle', 1);
-        runAnimation = _spriteAnimation(InsectsTypes.slug, 'run', 3);
-        attackAnimation = _spriteAnimation(InsectsTypes.slug, 'attack', 3);
+        runAnimation = _spriteAnimation(InsectsTypes.slug, 'run', 10);
+        attackAnimation = _spriteAnimation(InsectsTypes.slug, 'attack', 1);
         hitAnimation = _spriteAnimation(InsectsTypes.slug, 'hit', 1);
         break;
     }
@@ -127,13 +126,44 @@ class Insect extends SpriteAnimationGroupComponent with HasGameRef<PlantsVsInvad
     current = InsectAnimationStateType.idle;
   }
 
+  void _addHitBox() {
+    switch (insectsType) {
+      case InsectsTypes.colorado_beetle:
+        hitbox = RectangleHitbox(
+          position: Vector2(70, 0),
+          size: Vector2(125, 130),
+        );
+        break;
+      case InsectsTypes.mole:
+        hitbox = RectangleHitbox(
+          position: Vector2(70, 0),
+          size: Vector2(125, 130),
+        );
+        break;
+      case InsectsTypes.mole_cricket:
+        hitbox = RectangleHitbox(
+          position: Vector2(70, 0),
+          size: Vector2(125, 130),
+        );
+        break;
+      case InsectsTypes.slug:
+        hitbox = RectangleHitbox(
+          position: Vector2(70, 0),
+          size: Vector2(125, 130),
+        );
+        break;
+    }
+
+    add(hitbox);
+  }
+
   SpriteAnimation _spriteAnimation(InsectsTypes insectsType, String action, int amount) {
     return SpriteAnimation.fromFrameData(
       game.images.fromCache('levels/insects/${insectsType.name}/${insectsType.name}_$action.png'),
       SpriteAnimationData.sequenced(
         amount: amount,
         stepTime: animationStepTime,
-        textureSize: Vector2(70, 80),
+        textureSize: Vector2(960, 540),
       ),
     );
   }
@@ -157,8 +187,8 @@ class Insect extends SpriteAnimationGroupComponent with HasGameRef<PlantsVsInvad
     characterBar = CharacterBar(
       color: CharacterBarColors.greenFront,
       backgroundColor: CharacterBarColors.greenBack,
-      position: Vector2(0, -10),
-      size: Vector2(size.x, 7),
+      position: Vector2(hitbox.position.x, hitbox.position.y),
+      size: Vector2(hitbox.size.x, 5),
       progress: health / totalHealth,
     );
     add(characterBar);
@@ -169,8 +199,8 @@ class Insect extends SpriteAnimationGroupComponent with HasGameRef<PlantsVsInvad
     characterBar = CharacterBar(
       color: CharacterBarColors.greenFront,
       backgroundColor: CharacterBarColors.greenBack,
-      position: Vector2(0, -10),
-      size: Vector2(size.x, 7),
+      position: Vector2(hitbox.position.x, hitbox.position.y),
+      size: Vector2(hitbox.size.x, 5),
       progress: health / totalHealth,
     );
     add(characterBar);
@@ -273,8 +303,8 @@ class Insect extends SpriteAnimationGroupComponent with HasGameRef<PlantsVsInvad
   void _addPotionIcon(SpellType spellType) {
     add(Potion(
       spellType: spellType,
-      position: Vector2(54, -16),
-      size: Vector2.all(32),
+      position: Vector2(130, -15),
+      size: Vector2.all(70),
     ));
   }
 }
