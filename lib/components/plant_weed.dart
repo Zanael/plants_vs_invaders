@@ -39,7 +39,7 @@ class PlantWeed extends Plant with HasGameRef<PlantsVsInvaders>, CollisionCallba
   late final RectangleHitbox hitbox;
 
   final PlantWeedType plantWeedType;
-  final double animationStepTime = 0.5;
+  final double animationStepTime = 0.1;
 
   late final SpriteAnimation idleAnimation;
   late final SpriteAnimation hitAnimation;
@@ -94,11 +94,11 @@ class PlantWeed extends Plant with HasGameRef<PlantsVsInvaders>, CollisionCallba
         hitAnimation = _spriteAnimation(PlantWeedType.hogweed, 'hit', 1);
         break;
       case PlantWeedType.shepherds_purse:
-        idleAnimation = _spriteAnimation(PlantWeedType.shepherds_purse, 'idle', 1);
+        idleAnimation = _spriteAnimation(PlantWeedType.shepherds_purse, 'idle', 10);
         hitAnimation = _spriteAnimation(PlantWeedType.shepherds_purse, 'hit', 1);
         break;
       case PlantWeedType.wheatgrass:
-        idleAnimation = _spriteAnimation(PlantWeedType.wheatgrass, 'idle', 1);
+        idleAnimation = _spriteAnimation(PlantWeedType.wheatgrass, 'idle', 6);
         hitAnimation = _spriteAnimation(PlantWeedType.wheatgrass, 'hit', 1);
         break;
     }
@@ -154,7 +154,7 @@ class PlantWeed extends Plant with HasGameRef<PlantsVsInvaders>, CollisionCallba
       SpriteAnimationData.sequenced(
         amount: amount,
         stepTime: animationStepTime,
-        textureSize: Vector2(1920, 1080),
+        textureSize: Vector2(960, 540),
       ),
     );
   }

@@ -86,8 +86,8 @@ class PlantDefender extends Plant with HasGameRef<PlantsVsInvaders>, CollisionCa
             damage: BulletDamage.damage(plantDefenderType),
             moveSpeed: BulletSpeed.speed(plantDefenderType) * bulletSpeedCoefficient,
             position: Vector2(
-              plantPosition.x + 50,
-              plantPosition.y,
+              plantPosition.x - 20,
+              plantPosition.y - 50,
             ),
           ));
         }));

@@ -93,13 +93,13 @@ class Insect extends SpriteAnimationGroupComponent with HasGameRef<PlantsVsInvad
       case InsectsTypes.colorado_beetle:
         idleAnimation = _spriteAnimation(InsectsTypes.colorado_beetle, 'idle', 1);
         runAnimation = _spriteAnimation(InsectsTypes.colorado_beetle, 'run', 10);
-        attackAnimation = _spriteAnimation(InsectsTypes.colorado_beetle, 'attack', 1);
+        attackAnimation = _spriteAnimation(InsectsTypes.colorado_beetle, 'attack', 10);
         hitAnimation = _spriteAnimation(InsectsTypes.colorado_beetle, 'hit', 1);
         break;
       case InsectsTypes.mole:
         idleAnimation = _spriteAnimation(InsectsTypes.mole, 'idle', 1);
         runAnimation = _spriteAnimation(InsectsTypes.mole, 'run', 10);
-        attackAnimation = _spriteAnimation(InsectsTypes.mole, 'attack', 1);
+        attackAnimation = _spriteAnimation(InsectsTypes.mole, 'attack', 10);
         hitAnimation = _spriteAnimation(InsectsTypes.mole, 'hit', 1);
         break;
       case InsectsTypes.mole_cricket:
@@ -111,7 +111,7 @@ class Insect extends SpriteAnimationGroupComponent with HasGameRef<PlantsVsInvad
       case InsectsTypes.slug:
         idleAnimation = _spriteAnimation(InsectsTypes.slug, 'idle', 1);
         runAnimation = _spriteAnimation(InsectsTypes.slug, 'run', 10);
-        attackAnimation = _spriteAnimation(InsectsTypes.slug, 'attack', 1);
+        attackAnimation = _spriteAnimation(InsectsTypes.slug, 'attack', 10);
         hitAnimation = _spriteAnimation(InsectsTypes.slug, 'hit', 1);
         break;
     }

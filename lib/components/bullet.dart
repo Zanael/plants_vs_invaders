@@ -30,7 +30,7 @@ class Bullet extends SpriteAnimationGroupComponent with HasGameRef<PlantsVsInvad
   }) : super(
     key: ComponentKey.unique(),
     position: position,
-    size: Vector2(265, 150),
+    size: Vector2(438, 247),
   );
 
   late final RectangleHitbox hitbox;
@@ -54,8 +54,8 @@ class Bullet extends SpriteAnimationGroupComponent with HasGameRef<PlantsVsInvad
     _loadAllAnimations();
     startingPosition = Vector2(position.x, position.y);
     hitbox = RectangleHitbox(
-      position: Vector2(110, 50),
-      size: Vector2(40, 40),
+      position: Vector2(185, 85),
+      size: Vector2(60, 60),
     );
     add(hitbox);
 

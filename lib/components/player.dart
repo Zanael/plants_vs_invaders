@@ -26,10 +26,10 @@ class Player extends SpriteAnimationGroupComponent
     required position,
   }) : super(
           position: position,
-          size: Vector2(265, 150),
+          size: Vector2(433, 245),
         );
 
-  final double animationStepTime = 0.05;
+  final double animationStepTime = 0.07;
 
   late final SpriteAnimation idleLeftAnimation;
   late final SpriteAnimation idleUpAnimation;
@@ -61,7 +61,7 @@ class Player extends SpriteAnimationGroupComponent
 
   double horizontalMovement = 0;
   double verticalMovement = 0;
-  double moveSpeed = 90;
+  double moveSpeed = 110;
   Vector2 startingPosition = Vector2.zero();
   Vector2 velocity = Vector2.zero();
 
@@ -210,7 +210,7 @@ class Player extends SpriteAnimationGroupComponent
 
   void _addHitBox() {
     hitbox = RectangleHitbox(
-      position: Vector2(70,10),
+      position: Vector2(150, 95),
       size: Vector2(125, 130),
     );
     add(hitbox);

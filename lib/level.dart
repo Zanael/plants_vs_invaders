@@ -450,7 +450,7 @@ class Level extends World with HasGameRef<PlantsVsInvaders>, TapCallbacks, DragC
                 boardMapSpawnPoint[rowIndex][columnIndex].size.x,
                 boardMapSpawnPoint[rowIndex][columnIndex].size.y,
               // ).containsPoint(Vector2(position.x + 45, position.y + 65))) {
-              ).containsPoint(Vector2(position.x + 175, position.y + 100))) {
+              ).containsPoint(Vector2(position.x + 86, position.y + 114))) {
                 // INFO: Проверяем центр карточки при ее размере 91x129.
                 // INFO: Проверяем центр карточки при ее размере 350x200 (-110x-20).
                 if (plantsBoard[rowIndex][columnIndex] == null) {

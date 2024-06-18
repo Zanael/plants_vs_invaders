@@ -11,8 +11,8 @@ class PlaneAirForce extends SpriteAnimationGroupComponent with HasGameRef<Plants
     required position,
     // required size,
   }) : super(
-    position: Vector2(position.x, position.y - 100),
-    size: Vector2(530, 300),
+    position: Vector2(position.x, position.y - 400),
+    size: Vector2(1200, 680),
     priority: 1000,
   );
 

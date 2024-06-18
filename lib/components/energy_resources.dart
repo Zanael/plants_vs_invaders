@@ -18,8 +18,8 @@ class EnergyResources extends SpriteComponent with HasGameRef<PlantsVsInvaders> 
   FutureOr<void> onLoad() {
     sprite = Sprite(game.images.fromCache('levels/resources/energy.png'));
     add(RectangleHitbox(
-      position: Vector2(110, 50),
-      size: Vector2(40, 40),
+      position: Vector2(196, 88),
+      size: Vector2(60, 60),
     ));
     return super.onLoad();
   }
