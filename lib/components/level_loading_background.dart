@@ -16,11 +16,11 @@ class LevelLoadingBackground extends SpriteAnimationComponent with HasGameRef<Pl
   FutureOr<void> onLoad() async {
     size = gameRef.size;
 
-    final image = await Flame.images.load("levels/level_loading_background/level_loading_background_idle.png");
+    final image = await Flame.images.load("levels/level_loading_background/level_loading_background_idle.jpg");
     animation = SpriteAnimation.fromFrameData(
       image,
       SpriteAnimationData.sequenced(
-        amount: 1,
+        amount: 6,
         stepTime: animationStepTime,
         textureSize: Vector2(1920, 1080),
       ),
