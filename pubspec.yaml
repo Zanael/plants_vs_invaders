@@ -71,6 +71,7 @@ flutter:
     - assets/images/
     - assets/images/level_preview/
     - assets/images/levels/background/
+    - assets/images/levels/level_loading_background/
     - assets/images/levels/fields/
     - assets/images/levels/score_table/
     - assets/images/levels/menu/

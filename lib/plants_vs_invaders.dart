@@ -3,7 +3,9 @@ import 'dart:async';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/painting.dart';
+import 'package:plants_vs_invaders/components/level_loading_background.dart';
 import 'package:plants_vs_invaders/components/plants_base_type.dart';
 import 'package:plants_vs_invaders/level.dart';
 import 'package:plants_vs_invaders/levels/level_preview_carrot.dart';
@@ -11,21 +13,27 @@ import 'package:plants_vs_invaders/levels/level_preview_potato.dart';
 import 'package:plants_vs_invaders/levels/levels_map.dart';
 import 'package:plants_vs_invaders/levels/main_menu.dart';
 
-class PlantsVsInvaders extends FlameGame with HasKeyboardHandlerComponents, HasCollisionDetection {
+class PlantsVsInvaders extends FlameGame
+    with HasKeyboardHandlerComponents, HasCollisionDetection {
   @override
   Color backgroundColor() => const Color(0xFF211F30);
   late CameraComponent _camera;
   late World _currentLevel;
+  late LevelLoadingBackground _levelLoadingBackground;
 
   final double gameWidth = 1920;
   final double gameHeight = 1080;
 
   @override
   FutureOr<void> onLoad() async {
-    await _initialize();
+    await _initializeLoadingBackground();
 
-    // reloadMainMenu();
-    reloadLevelPreviewPotato();
+    await _showLoadingAnimation();
+    _initialize().whenComplete(() async {
+      await _hideLoadingAnimation();
+      // reloadMainMenu();
+      reloadLevelPreviewPotato();
+    });
 
     return super.onLoad();
   }
@@ -34,8 +42,11 @@ class PlantsVsInvaders extends FlameGame with HasKeyboardHandlerComponents, HasC
     await images.loadAllImages();
   }
 
-  void _loadLevel({required PlantBaseType levelPlantBaseType}) {
+  Future<void> _initializeLoadingBackground() async {
+    _levelLoadingBackground = LevelLoadingBackground();
+  }
 
+  void _loadLevel({required PlantBaseType levelPlantBaseType}) {
     _currentLevel = Level(levelPlantBaseType: levelPlantBaseType);
   }
 
@@ -54,6 +65,18 @@ class PlantsVsInvaders extends FlameGame with HasKeyboardHandlerComponents, HasC
     addAll([
       _camera,
       _currentLevel,
+    ]);
+  }
+
+  Future<void> _showLoadingAnimation() async {
+    addAll([
+      _levelLoadingBackground
+    ]);
+  }
+
+  Future<void> _hideLoadingAnimation() async {
+    removeAll([
+      _levelLoadingBackground
     ]);
   }
 
