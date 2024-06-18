@@ -82,7 +82,7 @@ class PlantWeed extends Plant with HasGameRef<PlantsVsInvaders>, CollisionCallba
   void _loadAllAnimations() {
     switch (plantWeedType) {
       case PlantWeedType.bindweed:
-        idleAnimation = _spriteAnimation(PlantWeedType.bindweed, 'idle', 1);
+        idleAnimation = _spriteAnimation(PlantWeedType.bindweed, 'idle', 10);
         hitAnimation = _spriteAnimation(PlantWeedType.bindweed, 'hit', 1);
         break;
       case PlantWeedType.dandelion:
