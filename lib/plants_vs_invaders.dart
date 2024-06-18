@@ -16,7 +16,7 @@ import 'package:plants_vs_invaders/levels/main_menu.dart';
 class PlantsVsInvaders extends FlameGame
     with HasKeyboardHandlerComponents, HasCollisionDetection {
   @override
-  Color backgroundColor() => const Color(0xFF211F30);
+  Color backgroundColor() => const Color(0xFF162C30);
   late CameraComponent _camera;
   late World _currentLevel;
   late LevelLoadingBackground _levelLoadingBackground;
