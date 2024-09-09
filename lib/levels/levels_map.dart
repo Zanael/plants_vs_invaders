@@ -8,12 +8,12 @@ import 'package:plants_vs_invaders/plants_vs_invaders.dart';
 
 class LevelsMap extends World with HasGameRef<PlantsVsInvaders> {
   late SpriteComponent backgroundImage;
-  late TiledComponent tiledLevel;
+  // late TiledComponent tiledLevel;
 
   @override
   FutureOr<void> onLoad() async {
     await _loadBackgroundImage();
-    await _loadTiledLevel();
+    // await _loadTiledLevel();
 
     // Уровень Картофель
     add(TappableRegion(
@@ -47,7 +47,7 @@ class LevelsMap extends World with HasGameRef<PlantsVsInvaders> {
     add(backgroundImage);
   }
 
-  Future<void> _loadTiledLevel() async {
-    tiledLevel = await TiledComponent.load('level.tmx', Vector2.all(32));
-  }
+  // Future<void> _loadTiledLevel() async {
+  //   tiledLevel = await TiledComponent.load('level.tmx', Vector2.all(32));
+  // }
 }

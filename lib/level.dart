@@ -11,6 +11,7 @@ import 'package:plants_vs_invaders/animation_state_types/available_unit_types.da
 import 'package:plants_vs_invaders/animation_state_types/spell_type.dart';
 import 'package:plants_vs_invaders/animation_state_types/victory_timer_bar_colors.dart';
 import 'package:plants_vs_invaders/components/collision_block.dart';
+import 'package:plants_vs_invaders/components/custom_tiled_object.dart';
 import 'package:plants_vs_invaders/components/end_game_block.dart';
 import 'package:plants_vs_invaders/components/energy_card.dart';
 import 'package:plants_vs_invaders/components/energy_resources.dart';
@@ -44,10 +45,12 @@ import 'package:plants_vs_invaders/components/victory_timer_bar.dart';
 import 'package:plants_vs_invaders/components/wind_generator.dart';
 import 'package:plants_vs_invaders/plants_vs_invaders.dart';
 
-class Level extends World with HasGameRef<PlantsVsInvaders>, TapCallbacks, DragCallbacks {
+class Level extends World
+    with HasGameRef<PlantsVsInvaders>, TapCallbacks, DragCallbacks {
   late Player player;
   late SpriteComponent backgroundImage;
-  late TiledComponent tiledLevel;
+
+  // late TiledComponent tiledLevel;
   final PlantBaseType levelPlantBaseType;
   final int boardRows = 5;
   final int boardColumns = 9;
@@ -191,7 +194,8 @@ class Level extends World with HasGameRef<PlantsVsInvaders>, TapCallbacks, DragC
   }
 
   Future<void> _loadBackgroundImage() async {
-    final image = await Flame.images.load("levels/background/level_background.png");
+    final image =
+        await Flame.images.load("levels/background/level_background.png");
     backgroundImage = SpriteComponent(
       sprite: Sprite(
         image,
@@ -202,7 +206,7 @@ class Level extends World with HasGameRef<PlantsVsInvaders>, TapCallbacks, DragC
   }
 
   Future<void> _loadTiledLevel() async {
-    tiledLevel = await TiledComponent.load('level.tmx', Vector2.all(32));
+    // tiledLevel = await TiledComponent.load('level.tmx', Vector2.all(32));
     boardMapSpawnPoint = List<List<SpriteFrame>>.generate(
         boardRows,
         (index) => List<SpriteFrame>.generate(
@@ -225,200 +229,146 @@ class Level extends World with HasGameRef<PlantsVsInvaders>, TapCallbacks, DragC
   }
 
   void _loadBoardMapPoints() {
-    final boardLayer = tiledLevel.tileMap.getLayer<ObjectGroup>('board');
+    final boardLayerObjects = CustomTiledObject.generateBoard();
 
-    if (boardLayer != null) {
-      for (final cell in boardLayer.objects) {
-        switch (cell.class_) {
-          case 'cell':
-            final position = Vector2(cell.x, cell.y);
-            final size = Vector2(cell.width, cell.height);
-            final row = cell.properties.getValue('row') as int;
-            final column = cell.properties.getValue('column') as int;
-            boardMapSpawnPoint[row][column] = SpriteFrame(
-              position: position,
-              size: size,
-            );
-            break;
-          default:
-            break;
-        }
-      }
+    for (final cell in boardLayerObjects) {
+      final position = Vector2(cell.x, cell.y);
+      final size = Vector2(cell.width, cell.height);
+      final row = cell.row;
+      final column = cell.column;
+      boardMapSpawnPoint[row][column] = SpriteFrame(
+        position: position,
+        size: size,
+      );
     }
   }
 
   void _loadSpawnPoints() {
-    final spawnPointsLayer = tiledLevel.tileMap.getLayer<ObjectGroup>('spawn_points');
+    final playerObject = CustomTiledObject.generatePlayerObject();
+    final planeObjects = CustomTiledObject.generatePlaneObjects();
+    final insectObjects = CustomTiledObject.generateInsectObjects();
 
-    if (spawnPointsLayer != null) {
-      for (final spawnPoint in spawnPointsLayer.objects) {
-        switch (spawnPoint.class_) {
-          case 'Insects':
-            final position = Vector2(spawnPoint.x, spawnPoint.y);
-            final size = Vector2(spawnPoint.width, spawnPoint.height);
-            final row = spawnPoint.properties.getValue('row') as int;
-            insectsSpawnPoints[row] = SpriteFrame(
-              position: position,
-              size: size,
-            );
-            break;
-          case 'Plane':
-            final position = Vector2(spawnPoint.x, spawnPoint.y);
-            final size = Vector2(spawnPoint.width, spawnPoint.height);
-            final row = spawnPoint.properties.getValue('row') as int;
-            planeSpawnPoints[row] = SpriteFrame(
-              position: position,
-              size: size,
-            );
-            break;
-          case 'Player':
-            final position = Vector2(spawnPoint.x, spawnPoint.y);
-            final size = Vector2(spawnPoint.width, spawnPoint.height);
-            playerSpawnPoint = SpriteFrame(position: position, size: size);
-            break;
-          default:
-            break;
-        }
-      }
+    playerSpawnPoint = SpriteFrame(
+      position: Vector2(playerObject.x, playerObject.y),
+      size: Vector2(playerObject.width, playerObject.height),
+    );
+
+    for (final planeObject in planeObjects) {
+      final position = Vector2(planeObject.x, planeObject.y);
+      final size = Vector2(planeObject.width, planeObject.height);
+      final row = planeObject.row;
+      planeSpawnPoints[row] = SpriteFrame(
+        position: position,
+        size: size,
+      );
+    }
+
+    for (final insectObject in insectObjects) {
+      final position = Vector2(insectObject.x, insectObject.y);
+      final size = Vector2(insectObject.width, insectObject.height);
+      final row = insectObject.row;
+      insectsSpawnPoints[row] = SpriteFrame(
+        position: position,
+        size: size,
+      );
     }
   }
 
   void _loadInterfacePoints() {
-    final interfacePointsLayer = tiledLevel.tileMap.getLayer<ObjectGroup>('interface');
+    final scoreTableObject = CustomTiledObject.generateScoreTableObject();
+    final menuButtonObject = CustomTiledObject.generateMenuButtonObject();
+    final fieldObject = CustomTiledObject.generateFieldObject();
+    final sunCardObjects = CustomTiledObject.generateSunCardObjects();
+    final energyCardObjects = CustomTiledObject.generateEnergyCardObjects();
 
-    if (interfacePointsLayer != null) {
-      for (final interfacePoint in interfacePointsLayer.objects) {
-        switch (interfacePoint.class_) {
-          case 'ScoreTable':
-            final position = Vector2(interfacePoint.x, interfacePoint.y);
-            final size = Vector2(interfacePoint.width, interfacePoint.height);
-            scoreTableSpawnPoint = SpriteFrame(
-              position: position,
-              size: size,
-            );
-            break;
-          case 'MenuButton':
-            final position = Vector2(interfacePoint.x, interfacePoint.y);
-            final size = Vector2(interfacePoint.width, interfacePoint.height);
-            menuButtonSpawnPoint = SpriteFrame(
-              position: position,
-              size: size,
-            );
-            break;
-          case 'Field':
-            final position = Vector2(interfacePoint.x, interfacePoint.y);
-            final size = Vector2(interfacePoint.width, interfacePoint.height);
-            fieldSpawnPoint = SpriteFrame(
-              position: position,
-              size: size,
-            );
-            break;
-          case 'SunCard':
-            final position = Vector2(interfacePoint.x, interfacePoint.y);
-            final size = Vector2(interfacePoint.width, interfacePoint.height);
-            final order = interfacePoint.properties.getValue('order') as int;
-            sunCardSpawnPoints[order] = SpriteFrame(
-              position: position,
-              size: size,
-            );
-            break;
-          case 'EnergyCard':
-            final position = Vector2(interfacePoint.x, interfacePoint.y);
-            final size = Vector2(interfacePoint.width, interfacePoint.height);
-            final order = interfacePoint.properties.getValue('order') as int;
-            energyCardSpawnPoints[order] = SpriteFrame(
-              position: position,
-              size: size,
-            );
-            break;
-          default:
-            break;
-        }
-      }
+    scoreTableSpawnPoint = SpriteFrame(
+      position: Vector2(scoreTableObject.x, scoreTableObject.y),
+      size: Vector2(scoreTableObject.width, scoreTableObject.height),
+    );
+
+    menuButtonSpawnPoint = SpriteFrame(
+      position: Vector2(menuButtonObject.x, menuButtonObject.y),
+      size: Vector2(menuButtonObject.width, menuButtonObject.height),
+    );
+
+    fieldSpawnPoint = SpriteFrame(
+      position: Vector2(fieldObject.x, fieldObject.y),
+      size: Vector2(fieldObject.width, fieldObject.height),
+    );
+
+    for (int order = 0; order < sunCardObjects.length; order++) {
+      sunCardSpawnPoints[order] = SpriteFrame(
+        position: Vector2(sunCardObjects[order].x, sunCardObjects[order].y),
+        size: Vector2(sunCardObjects[order].width, sunCardObjects[order].height),
+      );
+    }
+
+    for (int order = 0; order < energyCardObjects.length; order++) {
+      energyCardSpawnPoints[order] = SpriteFrame(
+        position: Vector2(energyCardObjects[order].x, energyCardObjects[order].y),
+        size: Vector2(energyCardObjects[order].width, energyCardObjects[order].height),
+      );
     }
   }
 
   void _loadGameObjectsPoints() {
-    final gameObjectsPointsLayer = tiledLevel.tileMap.getLayer<ObjectGroup>('game_objects');
+    final sunObject = CustomTiledObject.generateSunObject();
+    final sunGeneratorObject = CustomTiledObject.generateSunGeneratorObject();
+    final windGeneratorObject = CustomTiledObject.generateWindGeneratorObject();
+    final sunResourceObject = CustomTiledObject.generateSunResourceObject();
+    final energyResourceObject = CustomTiledObject.generateEnergyResourceObject();
 
-    if (gameObjectsPointsLayer != null) {
-      for (final gameObjectPoint in gameObjectsPointsLayer.objects) {
-        switch (gameObjectPoint.class_) {
-          case 'Sun':
-            final position = Vector2(gameObjectPoint.x, gameObjectPoint.y);
-            final size = Vector2(gameObjectPoint.width, gameObjectPoint.height);
-            sunSpawnPoint = SpriteFrame(
-              position: position,
-              size: size,
-            );
-            break;
-          case 'SunGenerator':
-            final position = Vector2(gameObjectPoint.x, gameObjectPoint.y);
-            final size = Vector2(gameObjectPoint.width, gameObjectPoint.height);
-            sunGeneratorSpawnPoint = SpriteFrame(
-              position: position,
-              size: size,
-            );
-            break;
-          case 'WindGenerator':
-            final position = Vector2(gameObjectPoint.x, gameObjectPoint.y);
-            final size = Vector2(gameObjectPoint.width, gameObjectPoint.height);
-            windGeneratorSpawnPoint = SpriteFrame(
-              position: position,
-              size: size,
-            );
-            break;
-          case 'SunResource':
-            final position = Vector2(gameObjectPoint.x, gameObjectPoint.y);
-            final size = Vector2(gameObjectPoint.width, gameObjectPoint.height);
-            sunResourceSpawnPoint = SpriteFrame(
-              position: position,
-              size: size,
-            );
-            break;
-          case 'EnergyResource':
-            final position = Vector2(gameObjectPoint.x, gameObjectPoint.y);
-            final size = Vector2(gameObjectPoint.width, gameObjectPoint.height);
-            windResourceSpawnPoint = SpriteFrame(
-              position: position,
-              size: size,
-            );
-            break;
-          default:
-            break;
-        }
-      }
-    }
+    sunSpawnPoint = SpriteFrame(
+      position: Vector2(sunObject.x, sunObject.y),
+      size: Vector2(sunObject.width, sunObject.height),
+    );
+
+    sunGeneratorSpawnPoint = SpriteFrame(
+      position: Vector2(sunGeneratorObject.x, sunGeneratorObject.y),
+      size: Vector2(sunGeneratorObject.width, sunGeneratorObject.height),
+    );
+
+    windGeneratorSpawnPoint = SpriteFrame(
+      position: Vector2(windGeneratorObject.x, windGeneratorObject.y),
+      size: Vector2(windGeneratorObject.width, windGeneratorObject.height),
+    );
+
+    sunResourceSpawnPoint = SpriteFrame(
+      position: Vector2(sunResourceObject.x, sunResourceObject.y),
+      size: Vector2(sunResourceObject.width, sunResourceObject.height),
+    );
+
+    windResourceSpawnPoint = SpriteFrame(
+      position: Vector2(energyResourceObject.x, energyResourceObject.y),
+      size: Vector2(energyResourceObject.width, energyResourceObject.height),
+    );
   }
 
   void _loadAndAddCollisionBlocks() {
-    final collisionsLayer = tiledLevel.tileMap.getLayer<ObjectGroup>('collisions');
+    final endGameObject = CustomTiledObject.generateEndGameCollision();
+    final collisionBlockObjects = CustomTiledObject.generateCollisionBlocks();
 
-    if (collisionsLayer != null) {
-      for (final collision in collisionsLayer.objects) {
-        final position = Vector2(collision.x, collision.y);
-        final size = Vector2(collision.width, collision.height);
-        if (collision.class_ == 'EndGame') {
-          final block = EndGameBlock(
-            position: position,
-            size: size,
-          );
-          endGameBlock = block;
-          add(endGameBlock);
-        } else {
-          final block = CollisionBlock(
-            position: position,
-            size: size,
-          );
-          collisionBlocks.add(block);
-          add(block);
-        }
-      }
+    endGameBlock = EndGameBlock(
+      position: Vector2(endGameObject.x, endGameObject.y),
+      size: Vector2(endGameObject.width, endGameObject.height),
+    );
+    add(endGameBlock);
+
+    for (final collision in collisionBlockObjects) {
+      final position = Vector2(collision.x, collision.y);
+      final size = Vector2(collision.width, collision.height);
+      final block = CollisionBlock(
+        position: position,
+        size: size,
+      );
+      collisionBlocks.add(block);
+      add(block);
     }
   }
 
   void _addSunCards() {
-    plantDefenderTypes = AvailableUnitTypes.plantDefendersTypes(levelPlantBaseType);
+    plantDefenderTypes =
+        AvailableUnitTypes.plantDefendersTypes(levelPlantBaseType);
     for (int i = 0; i < plantDefenderTypes.length; i++) {
       int cost = 0;
       switch (plantDefenderTypes[i]) {
@@ -444,14 +394,18 @@ class Level extends World with HasGameRef<PlantsVsInvaders>, TapCallbacks, DragC
         checkNewPlantPosition: (plantDefenderType, position) {
           if (sunResourcesCount - cost < 0) return;
 
-          for (int rowIndex = 0; rowIndex < boardMapSpawnPoint.length; rowIndex++) {
-            for (int columnIndex = 0; columnIndex < boardMapSpawnPoint[rowIndex].length; columnIndex++) {
+          for (int rowIndex = 0;
+              rowIndex < boardMapSpawnPoint.length;
+              rowIndex++) {
+            for (int columnIndex = 0;
+                columnIndex < boardMapSpawnPoint[rowIndex].length;
+                columnIndex++) {
               if (Rect.fromLTWH(
                 boardMapSpawnPoint[rowIndex][columnIndex].position.x,
                 boardMapSpawnPoint[rowIndex][columnIndex].position.y,
                 boardMapSpawnPoint[rowIndex][columnIndex].size.x,
                 boardMapSpawnPoint[rowIndex][columnIndex].size.y,
-              // ).containsPoint(Vector2(position.x + 45, position.y + 65))) {
+                // ).containsPoint(Vector2(position.x + 45, position.y + 65))) {
               ).containsPoint(Vector2(position.x + 86, position.y + 114))) {
                 // INFO: Проверяем центр карточки при ее размере 91x129.
                 // INFO: Проверяем центр карточки при ее размере 350x200 (-110x-20).
@@ -527,9 +481,7 @@ class Level extends World with HasGameRef<PlantsVsInvaders>, TapCallbacks, DragC
   void _addMenuButton() {
     menuButton = MenuButton(
       callback: () {
-        final Map<String, dynamic> data = {
-          "action": "failed"
-        };
+        final Map<String, dynamic> data = {"action": "failed"};
         const jsonEncoder = JsonEncoder();
         final json = jsonEncoder.convert(data);
         html.window.parent?.postMessage(json, "*");
@@ -626,7 +578,8 @@ class Level extends World with HasGameRef<PlantsVsInvaders>, TapCallbacks, DragC
     add(player);
   }
 
-  void spawnInsects({required InsectsTypes insectsType, required SpriteFrame spawnPoint}) {
+  void spawnInsects(
+      {required InsectsTypes insectsType, required SpriteFrame spawnPoint}) {
     Insect insect = Insect(
         insectsType: insectsType,
         position: spawnPoint.position,
@@ -638,8 +591,11 @@ class Level extends World with HasGameRef<PlantsVsInvaders>, TapCallbacks, DragC
   }
 
   void spawnWeeds(
-      {required PlantWeedType plantWeedType, required int spawnPointRowIndex, required int spawnPointColumnIndex}) {
-    final spawnPoint = boardMapSpawnPoint[spawnPointRowIndex][spawnPointColumnIndex];
+      {required PlantWeedType plantWeedType,
+      required int spawnPointRowIndex,
+      required int spawnPointColumnIndex}) {
+    final spawnPoint =
+        boardMapSpawnPoint[spawnPointRowIndex][spawnPointColumnIndex];
     PlantWeed plantWeed = PlantWeed(
       plantWeedType: plantWeedType,
       rowOnBoard: spawnPointRowIndex,
@@ -680,17 +636,13 @@ class Level extends World with HasGameRef<PlantsVsInvaders>, TapCallbacks, DragC
         completed: () {
           switch (gameOverType) {
             case GameOverType.victory:
-              final Map<String, dynamic> data = {
-                "action": "success"
-              };
+              final Map<String, dynamic> data = {"action": "success"};
               const jsonEncoder = JsonEncoder();
               final json = jsonEncoder.convert(data);
               html.window.parent?.postMessage(json, "*");
               break;
             case GameOverType.defeat:
-              final Map<String, dynamic> data = {
-                "action": "failed"
-              };
+              final Map<String, dynamic> data = {"action": "failed"};
               const jsonEncoder = JsonEncoder();
               final json = jsonEncoder.convert(data);
               html.window.parent?.postMessage(json, "*");
@@ -779,7 +731,9 @@ class Level extends World with HasGameRef<PlantsVsInvaders>, TapCallbacks, DragC
   void onTapUp(TapUpEvent event) {
     if (selectedSpellType != null) {
       for (int rowIndex = 0; rowIndex < boardMapSpawnPoint.length; rowIndex++) {
-        for (int columnIndex = 0; columnIndex < boardMapSpawnPoint[rowIndex].length; columnIndex++) {
+        for (int columnIndex = 0;
+            columnIndex < boardMapSpawnPoint[rowIndex].length;
+            columnIndex++) {
           if (Rect.fromLTWH(
             boardMapSpawnPoint[rowIndex][columnIndex].position.x,
             boardMapSpawnPoint[rowIndex][columnIndex].position.y,
