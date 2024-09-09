@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame/flame.dart';
 import 'package:plants_vs_invaders/animation_state_types/plane_animation_state_type.dart';
 import 'package:plants_vs_invaders/plants_vs_invaders.dart';
 
@@ -29,8 +30,8 @@ class PlaneAirForce extends SpriteAnimationGroupComponent with HasGameRef<Plants
   double accumulatedTime = 0;
 
   @override
-  FutureOr<void> onLoad() {
-    _loadAllAnimations();
+  FutureOr<void> onLoad() async {
+    await _loadAllAnimations();
     startingPosition = Vector2(position.x, position.y);
     add(RectangleHitbox());
 
@@ -50,8 +51,8 @@ class PlaneAirForce extends SpriteAnimationGroupComponent with HasGameRef<Plants
     super.update(dt);
   }
 
-  void _loadAllAnimations() {
-    idleAnimation = _spriteAnimation('plane', 11);
+  Future<void> _loadAllAnimations() async {
+    idleAnimation = await _spriteAnimation('plane', 11);
 
     animations = {
       PlaneAnimationStateType.idle: idleAnimation,
@@ -60,9 +61,10 @@ class PlaneAirForce extends SpriteAnimationGroupComponent with HasGameRef<Plants
     current = PlaneAnimationStateType.idle;
   }
 
-  SpriteAnimation _spriteAnimation(String name, int amount) {
+  Future<SpriteAnimation> _spriteAnimation(String name, int amount) async {
+    final image = await Flame.images.load("levels/plane/$name.png");
     return SpriteAnimation.fromFrameData(
-      game.images.fromCache('levels/plane/$name.png'),
+      image,
       SpriteAnimationData.sequenced(
         amount: amount,
         stepTime: animationStepTime,

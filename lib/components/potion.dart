@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flame/components.dart';
+import 'package:flame/flame.dart';
 import 'package:plants_vs_invaders/animation_state_types/spell_type.dart';
 import 'package:plants_vs_invaders/plants_vs_invaders.dart';
 
@@ -24,8 +25,8 @@ class Potion extends SpriteComponent with HasGameRef<PlantsVsInvaders> {
   );
 
   @override
-  FutureOr<void> onLoad() {
-    sprite = _sprite(spellType, 32);
+  FutureOr<void> onLoad() async {
+    sprite = await _sprite(spellType, 32);
     hideTimer = Timer(hideTimerSeconds);
 
     return super.onLoad();
@@ -58,20 +59,26 @@ class Potion extends SpriteComponent with HasGameRef<PlantsVsInvaders> {
     super.update(dt);
   }
 
-  Sprite _sprite(SpellType spellType, int size) {
+  Future<Sprite> _sprite(SpellType spellType, int size) async {
     switch (spellType) {
       case SpellType.circleBluePotion:
-        return Sprite(game.images.fromCache('levels/potions/circle/circle_blue_potion_$size.png'));
+        final image = await Flame.images.load("levels/potions/circle/circle_blue_potion_$size.png");
+        return Sprite(image);
       case SpellType.circleYellowPotion:
-        return Sprite(game.images.fromCache('levels/potions/circle/circle_yellow_potion_$size.png'));
+        final image = await Flame.images.load("levels/potions/circle/circle_yellow_potion_$size.png");
+        return Sprite(image);
       case SpellType.circleRedPotion:
-        return Sprite(game.images.fromCache('levels/potions/circle/circle_red_potion_$size.png'));
+        final image = await Flame.images.load("levels/potions/circle/circle_red_potion_$size.png");
+        return Sprite(image);
       case SpellType.rectBluePotion:
-        return Sprite(game.images.fromCache('levels/potions/rect/rect_blue_potion_$size.png'));
+        final image = await Flame.images.load("levels/potions/rect/rect_blue_potion_$size.png");
+        return Sprite(image);
       case SpellType.rectYellowPotion:
-        return Sprite(game.images.fromCache('levels/potions/rect/rect_yellow_potion_$size.png'));
+        final image = await Flame.images.load("levels/potions/rect/rect_yellow_potion_$size.png");
+        return Sprite(image);
       case SpellType.rectRedPotion:
-        return Sprite(game.images.fromCache('levels/potions/rect/rect_red_potion_$size.png'));
+        final image = await Flame.images.load("levels/potions/rect/rect_red_potion_$size.png");
+        return Sprite(image);
     }
   }
 }

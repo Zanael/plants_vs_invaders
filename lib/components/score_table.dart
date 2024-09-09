@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:flame/components.dart';
+import 'package:flame/flame.dart';
 import 'package:flame/text.dart';
 import 'package:plants_vs_invaders/plants_vs_invaders.dart';
 
@@ -20,8 +21,9 @@ class ScoreTable extends SpriteComponent with HasGameRef<PlantsVsInvaders> {
   );
 
   @override
-  FutureOr<void> onLoad() {
-    sprite = Sprite(game.images.fromCache('levels/score_table/score_table.png'));
+  FutureOr<void> onLoad() async {
+    final image = await Flame.images.load("levels/score_table/score_table.png");
+    sprite = Sprite(image);
     _addResources(sun: 200, energy: 100);
     return super.onLoad();
   }

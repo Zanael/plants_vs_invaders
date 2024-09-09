@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame/flame.dart';
 import 'package:flutter/services.dart';
 import 'package:plants_vs_invaders/animation_state_types/character_bar_colors.dart';
 import 'package:plants_vs_invaders/animation_state_types/insect_animation_state_type.dart';
@@ -64,8 +65,8 @@ class Insect extends SpriteAnimationGroupComponent with HasGameRef<PlantsVsInvad
   bool isInCloud = false;
 
   @override
-  FutureOr<void> onLoad() {
-    _loadAllAnimations();
+  FutureOr<void> onLoad() async {
+    await _loadAllAnimations();
     startingPosition = Vector2(position.x, position.y);
     _addHitBox();
     _addCharacterBar();
@@ -88,31 +89,31 @@ class Insect extends SpriteAnimationGroupComponent with HasGameRef<PlantsVsInvad
     super.update(dt);
   }
 
-  void _loadAllAnimations() {
+  Future<void> _loadAllAnimations() async {
     switch (insectsType) {
       case InsectsTypes.colorado_beetle:
-        idleAnimation = _spriteAnimation(InsectsTypes.colorado_beetle, 'idle', 1);
-        runAnimation = _spriteAnimation(InsectsTypes.colorado_beetle, 'run', 10);
-        attackAnimation = _spriteAnimation(InsectsTypes.colorado_beetle, 'attack', 10);
-        hitAnimation = _spriteAnimation(InsectsTypes.colorado_beetle, 'hit', 1);
+        idleAnimation = await _spriteAnimation(InsectsTypes.colorado_beetle, 'idle', 1);
+        runAnimation = await _spriteAnimation(InsectsTypes.colorado_beetle, 'run', 10);
+        attackAnimation = await _spriteAnimation(InsectsTypes.colorado_beetle, 'attack', 10);
+        hitAnimation = await _spriteAnimation(InsectsTypes.colorado_beetle, 'hit', 1);
         break;
       case InsectsTypes.mole:
-        idleAnimation = _spriteAnimation(InsectsTypes.mole, 'idle', 1);
-        runAnimation = _spriteAnimation(InsectsTypes.mole, 'run', 10);
-        attackAnimation = _spriteAnimation(InsectsTypes.mole, 'attack', 10);
-        hitAnimation = _spriteAnimation(InsectsTypes.mole, 'hit', 1);
+        idleAnimation = await _spriteAnimation(InsectsTypes.mole, 'idle', 1);
+        runAnimation = await _spriteAnimation(InsectsTypes.mole, 'run', 10);
+        attackAnimation = await _spriteAnimation(InsectsTypes.mole, 'attack', 10);
+        hitAnimation = await _spriteAnimation(InsectsTypes.mole, 'hit', 1);
         break;
       case InsectsTypes.mole_cricket:
-        idleAnimation = _spriteAnimation(InsectsTypes.mole_cricket, 'idle', 1);
-        runAnimation = _spriteAnimation(InsectsTypes.mole_cricket, 'run', 1);
-        attackAnimation = _spriteAnimation(InsectsTypes.mole_cricket, 'attack', 1);
-        hitAnimation = _spriteAnimation(InsectsTypes.mole_cricket, 'hit', 1);
+        idleAnimation = await _spriteAnimation(InsectsTypes.mole_cricket, 'idle', 1);
+        runAnimation = await _spriteAnimation(InsectsTypes.mole_cricket, 'run', 1);
+        attackAnimation = await _spriteAnimation(InsectsTypes.mole_cricket, 'attack', 1);
+        hitAnimation = await _spriteAnimation(InsectsTypes.mole_cricket, 'hit', 1);
         break;
       case InsectsTypes.slug:
-        idleAnimation = _spriteAnimation(InsectsTypes.slug, 'idle', 1);
-        runAnimation = _spriteAnimation(InsectsTypes.slug, 'run', 10);
-        attackAnimation = _spriteAnimation(InsectsTypes.slug, 'attack', 10);
-        hitAnimation = _spriteAnimation(InsectsTypes.slug, 'hit', 1);
+        idleAnimation = await _spriteAnimation(InsectsTypes.slug, 'idle', 1);
+        runAnimation = await _spriteAnimation(InsectsTypes.slug, 'run', 10);
+        attackAnimation = await _spriteAnimation(InsectsTypes.slug, 'attack', 10);
+        hitAnimation = await _spriteAnimation(InsectsTypes.slug, 'hit', 1);
         break;
     }
 
@@ -157,9 +158,10 @@ class Insect extends SpriteAnimationGroupComponent with HasGameRef<PlantsVsInvad
     add(hitbox);
   }
 
-  SpriteAnimation _spriteAnimation(InsectsTypes insectsType, String action, int amount) {
+  Future<SpriteAnimation> _spriteAnimation(InsectsTypes insectsType, String action, int amount) async {
+    final image = await Flame.images.load("levels/insects/${insectsType.name}/${insectsType.name}_$action.png");
     return SpriteAnimation.fromFrameData(
-      game.images.fromCache('levels/insects/${insectsType.name}/${insectsType.name}_$action.png'),
+      image,
       SpriteAnimationData.sequenced(
         amount: amount,
         stepTime: animationStepTime,

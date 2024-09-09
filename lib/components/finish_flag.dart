@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flame/components.dart';
+import 'package:flame/flame.dart';
 import 'package:plants_vs_invaders/plants_vs_invaders.dart';
 
 class FinishFlag extends SpriteComponent with HasGameRef<PlantsVsInvaders> {
@@ -15,7 +16,8 @@ class FinishFlag extends SpriteComponent with HasGameRef<PlantsVsInvaders> {
 
   @override
   FutureOr<void> onLoad() async {
-    sprite = Sprite(game.images.fromCache('levels/flags/red.png'));
+    final image = await Flame.images.load("levels/flags/red.png");
+    sprite = Sprite(image);
 
     return super.onLoad();
   }

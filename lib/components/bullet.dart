@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame/flame.dart';
 import 'package:flutter/services.dart';
 import 'package:plants_vs_invaders/animation_state_types/bullet_animation_state_type.dart';
 import 'package:plants_vs_invaders/animation_state_types/character_bar_colors.dart';
@@ -50,8 +51,8 @@ class Bullet extends SpriteAnimationGroupComponent with HasGameRef<PlantsVsInvad
   double accumulatedTime = 0;
 
   @override
-  FutureOr<void> onLoad() {
-    _loadAllAnimations();
+  FutureOr<void> onLoad() async {
+    await _loadAllAnimations();
     startingPosition = Vector2(position.x, position.y);
     hitbox = RectangleHitbox(
       position: Vector2(145, 55),
@@ -75,19 +76,19 @@ class Bullet extends SpriteAnimationGroupComponent with HasGameRef<PlantsVsInvad
     super.update(dt);
   }
 
-  void _loadAllAnimations() {
+  Future<void> _loadAllAnimations() async {
     switch (plantDefenderType) {
       case PlantDefenderType.peas:
-        idleAnimation = _spriteAnimation(PlantDefenderType.peas, 1);
+        idleAnimation = await _spriteAnimation(PlantDefenderType.peas, 1);
         break;
       case PlantDefenderType.oats:
-        idleAnimation = _spriteAnimation(PlantDefenderType.oats, 1);
+        idleAnimation = await _spriteAnimation(PlantDefenderType.oats, 1);
         break;
       case PlantDefenderType.clover:
-        idleAnimation = _spriteAnimation(PlantDefenderType.clover, 1);
+        idleAnimation = await _spriteAnimation(PlantDefenderType.clover, 1);
         break;
       case PlantDefenderType.buckwheat:
-        idleAnimation = _spriteAnimation(PlantDefenderType.buckwheat, 1);
+        idleAnimation = await _spriteAnimation(PlantDefenderType.buckwheat, 1);
         break;
     }
 
@@ -98,9 +99,10 @@ class Bullet extends SpriteAnimationGroupComponent with HasGameRef<PlantsVsInvad
     current = BulletAnimationStateType.idle;
   }
 
-  SpriteAnimation _spriteAnimation(PlantDefenderType plantDefenderType, int amount) {
+  Future<SpriteAnimation> _spriteAnimation(PlantDefenderType plantDefenderType, int amount) async {
+    final image = await Flame.images.load("levels/bullets/${plantDefenderType.name}/${plantDefenderType.name}.png");
     return SpriteAnimation.fromFrameData(
-      game.images.fromCache('levels/bullets/${plantDefenderType.name}/${plantDefenderType.name}.png'),
+      image,
       SpriteAnimationData.sequenced(
         amount: amount,
         stepTime: animationStepTime,

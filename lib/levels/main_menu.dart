@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flame/components.dart';
+import 'package:flame/flame.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:plants_vs_invaders/components/tappable_region.dart';
 import 'package:plants_vs_invaders/plants_vs_invaders.dart';
@@ -11,7 +12,7 @@ class MainMenu extends World with HasGameRef<PlantsVsInvaders> {
 
   @override
   FutureOr<void> onLoad() async {
-    _loadBackgroundImage();
+    await _loadBackgroundImage();
     await _loadTiledLevel();
 
     // Играть
@@ -26,10 +27,11 @@ class MainMenu extends World with HasGameRef<PlantsVsInvaders> {
     return super.onLoad();
   }
 
-  void _loadBackgroundImage() {
+  Future<void> _loadBackgroundImage() async {
+    final image = await Flame.images.load("main_menu.png");
     backgroundImage = SpriteComponent(
       sprite: Sprite(
-        game.images.fromCache('main_menu.png'),
+        image,
       ),
       position: Vector2(0, 0),
     );
