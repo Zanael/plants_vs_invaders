@@ -31,8 +31,7 @@ class PlantsVsInvaders extends FlameGame
     await _showLoadingAnimation();
     _initialize().whenComplete(() async {
       await _hideLoadingAnimation();
-      // reloadMainMenu();
-      reloadLevelPreviewPotato();
+      reloadMainMenu();
     });
 
     return super.onLoad();

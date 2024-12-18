@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:html' as html;
 
 import 'package:flame/components.dart';
 import 'package:flame_tiled/flame_tiled.dart';
@@ -30,14 +29,7 @@ class LevelPreviewPotato extends World with HasGameRef<PlantsVsInvaders> {
       position: Vector2(45, 35),
       size: Vector2(250, 70),
       callback: () {
-        // game.reloadLevelsMap();
-
-        final Map<String, dynamic> data = {
-          "action": "failed"
-        };
-        const jsonEncoder = JsonEncoder();
-        final json = jsonEncoder.convert(data);
-        html.window.parent?.postMessage(json, "*");
+        game.reloadLevelsMap();
       },
     ));
 

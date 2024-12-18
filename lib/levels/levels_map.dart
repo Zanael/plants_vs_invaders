@@ -16,8 +16,8 @@ class LevelsMap extends World with HasGameRef<PlantsVsInvaders> {
 
     // Уровень Картофель
     add(TappableRegion(
-      position: Vector2(211, 372),
-      size: Vector2(75, 102),
+      position: Vector2(480, 390),
+      size: Vector2(150, 180),
       callback: () {
         game.reloadLevelPreviewPotato();
       },
@@ -25,8 +25,8 @@ class LevelsMap extends World with HasGameRef<PlantsVsInvaders> {
 
     // Уровень Морковь
     add(TappableRegion(
-      position: Vector2(368, 407),
-      size: Vector2(72, 102),
+      position: Vector2(710, 400),
+      size: Vector2(150, 180),
       callback: () {
         game.reloadLevelPreviewCarrot();
       },

@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:html' as html;
 
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
@@ -155,10 +154,10 @@ class Level extends World
     _addWindGenerator();
     _addSunResources();
     _addEnergyResources();
-    _addPlayer();
+    // _addPlayer();
 
     _addInsectsSpawnTimer();
-    _addPlantWeedsSpawnTimer();
+    // _addPlantWeedsSpawnTimer();
     _addVictoryTimer();
 
     add(TimerComponent(
@@ -478,12 +477,8 @@ class Level extends World
   void _addMenuButton() {
     menuButton = MenuButton(
       callback: () {
-        final Map<String, dynamic> data = {"action": "failed"};
-        const jsonEncoder = JsonEncoder();
-        final json = jsonEncoder.convert(data);
-        html.window.parent?.postMessage(json, "*");
-        // game.reloadLevelsMap();
-        // removeFromParent();
+        game.reloadLevelsMap();
+        removeFromParent();
       },
       position: menuButtonSpawnPoint.position,
       size: menuButtonSpawnPoint.size,
@@ -647,21 +642,7 @@ class Level extends World
       final gameOverBanner = GameOverBanner(
         gameOverType: gameOverType,
         completed: () {
-          switch (gameOverType) {
-            case GameOverType.victory:
-              final Map<String, dynamic> data = {"action": "success"};
-              const jsonEncoder = JsonEncoder();
-              final json = jsonEncoder.convert(data);
-              html.window.parent?.postMessage(json, "*");
-              break;
-            case GameOverType.defeat:
-              final Map<String, dynamic> data = {"action": "failed"};
-              const jsonEncoder = JsonEncoder();
-              final json = jsonEncoder.convert(data);
-              html.window.parent?.postMessage(json, "*");
-              break;
-          }
-          // game.reloadLevelsMap();
+          game.reloadLevelsMap();
           removeFromParent();
         },
         position: backgroundImage.position,

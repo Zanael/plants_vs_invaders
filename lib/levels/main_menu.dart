@@ -16,8 +16,8 @@ class MainMenu extends World with HasGameRef<PlantsVsInvaders> {
 
     // Играть
     add(TappableRegion(
-      position: Vector2(770, 30),
-      size: Vector2(300, 180),
+      position: Vector2(1450, 50),
+      size: Vector2(400, 250),
       callback: () {
         game.reloadLevelsMap();
       },
