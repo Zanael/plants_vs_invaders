@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame/sprite.dart';
 import 'package:flutter/services.dart';
 import 'package:plants_vs_invaders/animation_state_types/character_bar_colors.dart';
 import 'package:plants_vs_invaders/animation_state_types/insect_animation_state_type.dart';
@@ -158,14 +159,22 @@ class Insect extends SpriteAnimationGroupComponent with HasGameRef<PlantsVsInvad
   }
 
   SpriteAnimation _spriteAnimation(InsectsTypes insectsType, String action, int amount) {
-    return SpriteAnimation.fromFrameData(
-      game.images.fromCache('levels/insects/${insectsType.name}/${insectsType.name}_$action.png'),
-      SpriteAnimationData.sequenced(
-        amount: amount,
-        stepTime: animationStepTime,
-        textureSize: Vector2(960, 540),
-      ),
-    );
+    final spriteSheet = SpriteSheet.fromColumnsAndRows(
+        image: game.images.fromCache('levels/insects/${insectsType.name}/${insectsType.name}_$action.png'),
+        columns: amount,
+        rows: 1);
+    return spriteSheet.createAnimation(row: 0, stepTime: animationStepTime, from: 0, to: amount);
+
+    // Некорректно работает на iOS.
+    // return SpriteAnimation.fromFrameData(
+    //   game.images.fromCache('levels/insects/${insectsType.name}/${insectsType.name}_$action.png'),
+    //   SpriteAnimationData.sequenced(
+    //     amount: amount,
+    //     stepTime: animationStepTime,
+    //     textureSize: Vector2(960, 540),
+    //     texturePosition: Vector2(0, 0),
+    //   ),
+    // );
   }
 
   void _updateAnimationStateType() {

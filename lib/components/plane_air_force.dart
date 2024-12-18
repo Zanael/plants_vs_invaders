@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame/sprite.dart';
 import 'package:plants_vs_invaders/animation_state_types/plane_animation_state_type.dart';
 import 'package:plants_vs_invaders/plants_vs_invaders.dart';
 
@@ -61,14 +62,21 @@ class PlaneAirForce extends SpriteAnimationGroupComponent with HasGameRef<Plants
   }
 
   SpriteAnimation _spriteAnimation(String name, int amount) {
-    return SpriteAnimation.fromFrameData(
-      game.images.fromCache('levels/plane/$name.png'),
-      SpriteAnimationData.sequenced(
-        amount: amount,
-        stepTime: animationStepTime,
-        textureSize: Vector2(960, 540),
-      ),
-    );
+    final spriteSheet = SpriteSheet.fromColumnsAndRows(
+        image: game.images.fromCache('levels/plane/$name.png'),
+        columns: amount,
+        rows: 1);
+    return spriteSheet.createAnimation(row: 0, stepTime: animationStepTime, from: 0, to: amount);
+
+    // Некорректно работает на iOS.
+    // return SpriteAnimation.fromFrameData(
+    //   game.images.fromCache('levels/plane/$name.png'),
+    //   SpriteAnimationData.sequenced(
+    //     amount: amount,
+    //     stepTime: animationStepTime,
+    //     textureSize: Vector2(960, 540),
+    //   ),
+    // );
   }
 
   void _updateAnimationStateType() {

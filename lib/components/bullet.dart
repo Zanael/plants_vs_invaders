@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame/sprite.dart';
 import 'package:flutter/services.dart';
 import 'package:plants_vs_invaders/animation_state_types/bullet_animation_state_type.dart';
 import 'package:plants_vs_invaders/animation_state_types/character_bar_colors.dart';
@@ -99,14 +100,21 @@ class Bullet extends SpriteAnimationGroupComponent with HasGameRef<PlantsVsInvad
   }
 
   SpriteAnimation _spriteAnimation(PlantDefenderType plantDefenderType, int amount) {
-    return SpriteAnimation.fromFrameData(
-      game.images.fromCache('levels/bullets/${plantDefenderType.name}/${plantDefenderType.name}.png'),
-      SpriteAnimationData.sequenced(
-        amount: amount,
-        stepTime: animationStepTime,
-        textureSize: Vector2(1920, 1080),
-      ),
-    );
+    final spriteSheet = SpriteSheet.fromColumnsAndRows(
+        image: game.images.fromCache('levels/bullets/${plantDefenderType.name}/${plantDefenderType.name}.png'),
+        columns: amount,
+        rows: 1);
+    return spriteSheet.createAnimation(row: 0, stepTime: animationStepTime, from: 0, to: amount);
+
+    // Некорректно работает на iOS.
+    // return SpriteAnimation.fromFrameData(
+    //   game.images.fromCache('levels/bullets/${plantDefenderType.name}/${plantDefenderType.name}.png'),
+    //   SpriteAnimationData.sequenced(
+    //     amount: amount,
+    //     stepTime: animationStepTime,
+    //     textureSize: Vector2(1920, 1080),
+    //   ),
+    // );
   }
 
   void _updateAnimationStateType() {

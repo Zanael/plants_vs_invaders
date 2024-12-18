@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame/sprite.dart';
 import 'package:plants_vs_invaders/animation_state_types/plane_cloud_animation_state_type.dart';
 import 'package:plants_vs_invaders/animation_state_types/spell_type.dart';
 import 'package:plants_vs_invaders/plants_vs_invaders.dart';
@@ -74,15 +75,22 @@ class PlaneCloud extends SpriteAnimationGroupComponent with HasGameRef<PlantsVsI
   }
 
   SpriteAnimation _spriteAnimation(String name, int amount) {
-    return SpriteAnimation.fromFrameData(
-      game.images.fromCache('levels/plane_cloud/$name.png'),
-      SpriteAnimationData.sequenced(
-        amount: amount,
-        stepTime: animationStepTime,
-        textureSize: Vector2(960, 540),
-        loop: false,
-      ),
-    );
+    final spriteSheet = SpriteSheet.fromColumnsAndRows(
+        image: game.images.fromCache('levels/plane_cloud/$name.png'),
+        columns: amount,
+        rows: 1);
+    return spriteSheet.createAnimation(row: 0, stepTime: animationStepTime, from: 0, to: amount, loop: false);
+
+    // Некорректно работает на iOS.
+    // return SpriteAnimation.fromFrameData(
+    //   game.images.fromCache('levels/plane_cloud/$name.png'),
+    //   SpriteAnimationData.sequenced(
+    //     amount: amount,
+    //     stepTime: animationStepTime,
+    //     textureSize: Vector2(960, 540),
+    //     loop: false,
+    //   ),
+    // );
   }
 
   void _updateAnimationStateType() {
