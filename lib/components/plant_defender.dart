@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:flame/flame.dart';
 import 'package:flutter/services.dart';
 import 'package:plants_vs_invaders/animation_state_types/bullet_damage.dart';
 import 'package:plants_vs_invaders/animation_state_types/bullet_interval.dart';
@@ -69,8 +68,8 @@ class PlantDefender extends Plant with HasGameRef<PlantsVsInvaders>, CollisionCa
   final int columnOnBoard;
 
   @override
-  FutureOr<void> onLoad() async {
-    await _loadAllAnimations();
+  FutureOr<void> onLoad() {
+    _loadAllAnimations();
     _addHitBox();
     _addCharacterBar();
 
@@ -114,23 +113,23 @@ class PlantDefender extends Plant with HasGameRef<PlantsVsInvaders>, CollisionCa
     super.update(dt);
   }
 
-  Future<void> _loadAllAnimations() async {
+  void _loadAllAnimations() {
     switch (plantDefenderType) {
       case PlantDefenderType.peas:
-        idleAnimation = await _spriteAnimation(PlantDefenderType.peas, 'idle', 10);
-        hitAnimation = await _spriteAnimation(PlantDefenderType.peas, 'hit', 1);
+        idleAnimation = _spriteAnimation(PlantDefenderType.peas, 'idle', 10);
+        hitAnimation = _spriteAnimation(PlantDefenderType.peas, 'hit', 1);
         break;
       case PlantDefenderType.oats:
-        idleAnimation = await _spriteAnimation(PlantDefenderType.oats, 'idle', 10);
-        hitAnimation = await _spriteAnimation(PlantDefenderType.oats, 'hit', 1);
+        idleAnimation = _spriteAnimation(PlantDefenderType.oats, 'idle', 10);
+        hitAnimation = _spriteAnimation(PlantDefenderType.oats, 'hit', 1);
         break;
       case PlantDefenderType.buckwheat:
-        idleAnimation = await _spriteAnimation(PlantDefenderType.buckwheat, 'idle', 10);
-        hitAnimation = await _spriteAnimation(PlantDefenderType.buckwheat, 'hit', 1);
+        idleAnimation = _spriteAnimation(PlantDefenderType.buckwheat, 'idle', 10);
+        hitAnimation = _spriteAnimation(PlantDefenderType.buckwheat, 'hit', 1);
         break;
       case PlantDefenderType.clover:
-        idleAnimation = await _spriteAnimation(PlantDefenderType.clover, 'idle', 10);
-        hitAnimation = await _spriteAnimation(PlantDefenderType.clover, 'hit', 1);
+        idleAnimation = _spriteAnimation(PlantDefenderType.clover, 'idle', 10);
+        hitAnimation = _spriteAnimation(PlantDefenderType.clover, 'hit', 1);
         break;
     }
 
@@ -173,10 +172,9 @@ class PlantDefender extends Plant with HasGameRef<PlantsVsInvaders>, CollisionCa
     add(hitbox);
   }
 
-  Future<SpriteAnimation> _spriteAnimation(PlantDefenderType plantDefenderType, String action, int amount) async {
-    final image = await Flame.images.load("levels/plants/defenders/${plantDefenderType.name}/${plantDefenderType.name}_$action.png");
+  SpriteAnimation _spriteAnimation(PlantDefenderType plantDefenderType, String action, int amount) {
     return SpriteAnimation.fromFrameData(
-      image,
+      game.images.fromCache('levels/plants/defenders/${plantDefenderType.name}/${plantDefenderType.name}_$action.png'),
       SpriteAnimationData.sequenced(
         amount: amount,
         stepTime: animationStepTime,

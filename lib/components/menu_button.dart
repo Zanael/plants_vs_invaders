@@ -3,7 +3,6 @@ import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
-import 'package:flame/flame.dart';
 import 'package:plants_vs_invaders/plants_vs_invaders.dart';
 
 class MenuButton extends SpriteComponent with HasGameRef<PlantsVsInvaders>, TapCallbacks {
@@ -20,9 +19,8 @@ class MenuButton extends SpriteComponent with HasGameRef<PlantsVsInvaders>, TapC
   );
 
   @override
-  FutureOr<void> onLoad() async {
-    final image = await Flame.images.load("levels/menu/menu_button.png");
-    sprite = Sprite(image);
+  FutureOr<void> onLoad() {
+    sprite = Sprite(game.images.fromCache('levels/menu/menu_button.png'));
 
     return super.onLoad();
   }

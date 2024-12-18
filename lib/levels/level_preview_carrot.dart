@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flame/components.dart';
-import 'package:flame/flame.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:plants_vs_invaders/components/tappable_region.dart';
 import 'package:plants_vs_invaders/plants_vs_invaders.dart';
@@ -12,7 +11,7 @@ class LevelPreviewCarrot extends World with HasGameRef<PlantsVsInvaders> {
 
   @override
   FutureOr<void> onLoad() async {
-    await _loadBackgroundImage();
+    _loadBackgroundImage();
     // await _loadTiledLevel();
 
     // Играть
@@ -36,11 +35,10 @@ class LevelPreviewCarrot extends World with HasGameRef<PlantsVsInvaders> {
     return super.onLoad();
   }
 
-  Future<void> _loadBackgroundImage() async {
-    final image = await Flame.images.load("level_preview/carrot.png");
+  void _loadBackgroundImage() {
     backgroundImage = SpriteComponent(
       sprite: Sprite(
-        image,
+        game.images.fromCache('level_preview/carrot.png'),
       ),
       position: Vector2(0, 0),
     );

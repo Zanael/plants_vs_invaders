@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:flame/flame.dart';
 import 'package:flutter/services.dart';
 import 'package:plants_vs_invaders/animation_state_types/character_bar_colors.dart';
 import 'package:plants_vs_invaders/animation_state_types/player_action_type.dart';
@@ -88,9 +87,9 @@ class Player extends SpriteAnimationGroupComponent
   Insect? targetInsect;
 
   @override
-  FutureOr<void> onLoad() async {
+  FutureOr<void> onLoad() {
     priority = 1000;
-    await _loadAllAnimations();
+    _loadAllAnimations();
     // _addCharacterBar();
     startingPosition = Vector2(position.x, position.y);
     _addHitBox();
@@ -146,31 +145,31 @@ class Player extends SpriteAnimationGroupComponent
     return super.onKeyEvent(event, keysPressed);
   }
 
-  Future<void> _loadAllAnimations() async {
-    idleLeftAnimation = await _spriteAnimation('idle', 'left', 1);
-    idleUpAnimation = await _spriteAnimation('idle', 'up', 1);
-    idleRightAnimation = await _spriteAnimation('idle', 'right', 1);
-    idleDownAnimation = await _spriteAnimation('idle', 'down', 1);
+  void _loadAllAnimations() {
+    idleLeftAnimation = _spriteAnimation('idle', 'left', 1);
+    idleUpAnimation = _spriteAnimation('idle', 'up', 1);
+    idleRightAnimation = _spriteAnimation('idle', 'right', 1);
+    idleDownAnimation = _spriteAnimation('idle', 'down', 1);
 
-    runLeftAnimation = await _spriteAnimation('run', 'left', 13);
-    runUpAnimation = await _spriteAnimation('run', 'up', 14);
-    runRightAnimation = await _spriteAnimation('run', 'right', 14);
-    runDownAnimation = await _spriteAnimation('run', 'down', 14);
+    runLeftAnimation = _spriteAnimation('run', 'left', 13);
+    runUpAnimation = _spriteAnimation('run', 'up', 14);
+    runRightAnimation = _spriteAnimation('run', 'right', 14);
+    runDownAnimation = _spriteAnimation('run', 'down', 14);
 
-    healLeftAnimation = await _spriteAnimation('heal', 'left', 17);
-    healUpAnimation = await _spriteAnimation('heal', 'up', 17);
-    healRightAnimation = await _spriteAnimation('heal', 'right', 17);
-    healDownAnimation = await _spriteAnimation('heal', 'down', 17);
+    healLeftAnimation = _spriteAnimation('heal', 'left', 17);
+    healUpAnimation = _spriteAnimation('heal', 'up', 17);
+    healRightAnimation = _spriteAnimation('heal', 'right', 17);
+    healDownAnimation = _spriteAnimation('heal', 'down', 17);
 
-    attackInsetsLeftAnimation = await _spriteAnimation('attack/insects', 'left', 10);
-    attackInsetsUpAnimation = await _spriteAnimation('attack/insects', 'up', 11);
-    attackInsetsRightAnimation = await _spriteAnimation('attack/insects', 'right', 11);
-    attackInsetsDownAnimation = await _spriteAnimation('attack/insects', 'down', 11);
+    attackInsetsLeftAnimation = _spriteAnimation('attack/insects', 'left', 10);
+    attackInsetsUpAnimation = _spriteAnimation('attack/insects', 'up', 11);
+    attackInsetsRightAnimation = _spriteAnimation('attack/insects', 'right', 11);
+    attackInsetsDownAnimation = _spriteAnimation('attack/insects', 'down', 11);
 
-    attackPlantsLeftAnimation = await _spriteAnimation('attack/plants', 'left', 10);
-    attackPlantsUpAnimation = await _spriteAnimation('attack/plants', 'up', 11);
-    attackPlantsRightAnimation = await _spriteAnimation('attack/plants', 'right', 11);
-    attackPlantsDownAnimation = await _spriteAnimation('attack/plants', 'down', 11);
+    attackPlantsLeftAnimation = _spriteAnimation('attack/plants', 'left', 10);
+    attackPlantsUpAnimation = _spriteAnimation('attack/plants', 'up', 11);
+    attackPlantsRightAnimation = _spriteAnimation('attack/plants', 'right', 11);
+    attackPlantsDownAnimation = _spriteAnimation('attack/plants', 'down', 11);
 
     animations = {
       PlayerAnimationStateType.idleLeft: idleLeftAnimation,
@@ -198,10 +197,9 @@ class Player extends SpriteAnimationGroupComponent
     current = PlayerAnimationStateType.idleRight;
   }
 
-  Future<SpriteAnimation> _spriteAnimation(String actionPath, String direction, int amount) async {
-    final image = await Flame.images.load("levels/player/$actionPath/player_${actionPath.replaceAll('/', '_')}_$direction.png");
+  SpriteAnimation _spriteAnimation(String actionPath, String direction, int amount) {
     return SpriteAnimation.fromFrameData(
-      image,
+      game.images.fromCache('levels/player/$actionPath/player_${actionPath.replaceAll('/', '_')}_$direction.png'),
       SpriteAnimationData.sequenced(
         amount: amount,
         stepTime: animationStepTime,

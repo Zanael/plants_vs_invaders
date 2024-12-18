@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:flame/flame.dart';
 import 'package:flutter/services.dart';
 import 'package:plants_vs_invaders/animation_state_types/character_bar_colors.dart';
 import 'package:plants_vs_invaders/animation_state_types/insect_animation_state_type.dart';
@@ -57,8 +56,8 @@ class PlantWeed extends Plant with HasGameRef<PlantsVsInvaders>, CollisionCallba
   final int columnOnBoard;
 
   @override
-  FutureOr<void> onLoad() async {
-    await _loadAllAnimations();
+  FutureOr<void> onLoad() {
+    _loadAllAnimations();
     _addHitBox();
     _addCharacterBar();
 
@@ -80,27 +79,27 @@ class PlantWeed extends Plant with HasGameRef<PlantsVsInvaders>, CollisionCallba
     super.update(dt);
   }
 
-  Future<void> _loadAllAnimations() async {
+  void _loadAllAnimations() {
     switch (plantWeedType) {
       case PlantWeedType.bindweed:
-        idleAnimation = await _spriteAnimation(PlantWeedType.bindweed, 'idle', 10);
-        hitAnimation = await _spriteAnimation(PlantWeedType.bindweed, 'hit', 1);
+        idleAnimation = _spriteAnimation(PlantWeedType.bindweed, 'idle', 10);
+        hitAnimation = _spriteAnimation(PlantWeedType.bindweed, 'hit', 1);
         break;
       case PlantWeedType.dandelion:
-        idleAnimation = await _spriteAnimation(PlantWeedType.dandelion, 'idle', 1);
-        hitAnimation = await _spriteAnimation(PlantWeedType.dandelion, 'hit', 1);
+        idleAnimation = _spriteAnimation(PlantWeedType.dandelion, 'idle', 1);
+        hitAnimation = _spriteAnimation(PlantWeedType.dandelion, 'hit', 1);
         break;
       case PlantWeedType.hogweed:
-        idleAnimation = await _spriteAnimation(PlantWeedType.hogweed, 'idle', 1);
-        hitAnimation = await _spriteAnimation(PlantWeedType.hogweed, 'hit', 1);
+        idleAnimation = _spriteAnimation(PlantWeedType.hogweed, 'idle', 1);
+        hitAnimation = _spriteAnimation(PlantWeedType.hogweed, 'hit', 1);
         break;
       case PlantWeedType.shepherds_purse:
-        idleAnimation = await _spriteAnimation(PlantWeedType.shepherds_purse, 'idle', 10);
-        hitAnimation = await _spriteAnimation(PlantWeedType.shepherds_purse, 'hit', 1);
+        idleAnimation = _spriteAnimation(PlantWeedType.shepherds_purse, 'idle', 10);
+        hitAnimation = _spriteAnimation(PlantWeedType.shepherds_purse, 'hit', 1);
         break;
       case PlantWeedType.wheatgrass:
-        idleAnimation = await _spriteAnimation(PlantWeedType.wheatgrass, 'idle', 6);
-        hitAnimation = await _spriteAnimation(PlantWeedType.wheatgrass, 'hit', 1);
+        idleAnimation = _spriteAnimation(PlantWeedType.wheatgrass, 'idle', 6);
+        hitAnimation = _spriteAnimation(PlantWeedType.wheatgrass, 'hit', 1);
         break;
     }
 
@@ -149,10 +148,9 @@ class PlantWeed extends Plant with HasGameRef<PlantsVsInvaders>, CollisionCallba
     add(hitbox);
   }
 
-  Future<SpriteAnimation> _spriteAnimation(PlantWeedType plantWeedType, String action, int amount) async {
-    final image = await Flame.images.load("levels/plants/weeds/${plantWeedType.name}/${plantWeedType.name}_$action.png");
+  SpriteAnimation _spriteAnimation(PlantWeedType plantWeedType, String action, int amount) {
     return SpriteAnimation.fromFrameData(
-      image,
+      game.images.fromCache('levels/plants/weeds/${plantWeedType.name}/${plantWeedType.name}_$action.png'),
       SpriteAnimationData.sequenced(
         amount: amount,
         stepTime: animationStepTime,

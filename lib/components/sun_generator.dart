@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flame/components.dart';
-import 'package:flame/flame.dart';
 import 'package:plants_vs_invaders/plants_vs_invaders.dart';
 
 class SunGenerator extends SpriteAnimationComponent with HasGameRef<PlantsVsInvaders> {
@@ -16,10 +15,9 @@ class SunGenerator extends SpriteAnimationComponent with HasGameRef<PlantsVsInva
   );
 
   @override
-  FutureOr<void> onLoad() async {
-    final image = await Flame.images.load("levels/sun_generator/sun_generator_idle.png");
+  FutureOr<void> onLoad() {
     animation = SpriteAnimation.fromFrameData(
-      image,
+      game.images.fromCache('levels/sun_generator/sun_generator_idle.png'),
       SpriteAnimationData.sequenced(
         amount: 1,
         stepTime: animationStepTime,

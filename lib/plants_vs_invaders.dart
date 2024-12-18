@@ -39,7 +39,7 @@ class PlantsVsInvaders extends FlameGame
   }
 
   Future<void> _initialize() async {
-    // await images.loadAllImages();
+    await images.loadAllImages();
   }
 
   Future<void> _initializeLoadingBackground() async {

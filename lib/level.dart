@@ -5,7 +5,6 @@ import 'dart:html' as html;
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/extensions.dart';
-import 'package:flame/flame.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:plants_vs_invaders/animation_state_types/available_unit_types.dart';
 import 'package:plants_vs_invaders/animation_state_types/spell_type.dart';
@@ -138,7 +137,7 @@ class Level extends World
   FutureOr<void> onLoad() async {
     player = Player(level: this, position: Vector2(-1000, -1000));
     fieldType = levelPlantBaseType;
-    await _loadBackgroundImage();
+    _loadBackgroundImage();
     await _loadTiledLevel();
     _loadBoardMapPoints();
     _loadSpawnPoints();
@@ -193,12 +192,10 @@ class Level extends World
     super.update(dt);
   }
 
-  Future<void> _loadBackgroundImage() async {
-    final image =
-        await Flame.images.load("levels/background/level_background.png");
+  void _loadBackgroundImage() {
     backgroundImage = SpriteComponent(
       sprite: Sprite(
-        image,
+        game.images.fromCache('levels/background/level_background.png'),
       ),
       position: Vector2(0, 0),
     );

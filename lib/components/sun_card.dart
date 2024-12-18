@@ -3,7 +3,6 @@ import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
-import 'package:flame/flame.dart';
 import 'package:flame/text.dart';
 import 'package:plants_vs_invaders/components/plant_defender_type.dart';
 import 'package:plants_vs_invaders/plants_vs_invaders.dart';
@@ -27,10 +26,9 @@ class SunCard extends SpriteComponent with HasGameRef<PlantsVsInvaders> {
   Vector2 dragStartPosition = Vector2.zero();
 
   @override
-  FutureOr<void> onLoad() async {
+  FutureOr<void> onLoad() {
     priority = 100;
-    final image = await Flame.images.load("levels/sun_cards/${plantDefenderType.name}.png");
-    sprite = Sprite(image);
+    sprite = Sprite(game.images.fromCache('levels/sun_cards/${plantDefenderType.name}.png'));
     _addPrice();
     return super.onLoad();
   }

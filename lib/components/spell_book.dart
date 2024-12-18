@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:flame/components.dart';
-import 'package:flame/flame.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:plants_vs_invaders/components/tappable_region.dart';
 import 'package:plants_vs_invaders/plants_vs_invaders.dart';
@@ -35,8 +34,7 @@ class SpellBook extends SpriteComponent with HasGameRef<PlantsVsInvaders> {
   @override
   FutureOr<void> onLoad() async {
     priority = 10000;
-    final image = await Flame.images.load("levels/spell_book/spell_book.png");
-    sprite = Sprite(image);
+    sprite = Sprite(game.images.fromCache('levels/spell_book/spell_book.png'));
 
     // Закрыть
     add(TappableRegion(
