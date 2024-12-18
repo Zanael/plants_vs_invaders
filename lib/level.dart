@@ -527,6 +527,10 @@ class Level extends World
 
   void _addSunResources() {
     sunResources = SunResources(
+      callback: () {
+        sunResources?.removeFromParent();
+        collectSunResources(50);
+      },
       position: sunResourceSpawnPoint.position,
       size: sunResourceSpawnPoint.size,
     );
@@ -535,6 +539,10 @@ class Level extends World
 
   void _addEnergyResources() {
     energyResources = EnergyResources(
+      callback: () {
+        energyResources?.removeFromParent();
+        collectEnergyResources(50);
+      },
       position: windResourceSpawnPoint.position,
       size: windResourceSpawnPoint.size,
     );
@@ -549,6 +557,10 @@ class Level extends World
     }
     sunResources = null;
     sunResources = SunResources(
+      callback: () {
+        sunResources?.removeFromParent();
+        collectSunResources(50);
+      },
       position: sunResourceSpawnPoint.position,
       size: sunResourceSpawnPoint.size,
     );
@@ -563,6 +575,10 @@ class Level extends World
     }
     energyResources = null;
     energyResources = EnergyResources(
+      callback: () {
+        energyResources?.removeFromParent();
+        collectEnergyResources(50);
+      },
       position: windResourceSpawnPoint.position,
       size: windResourceSpawnPoint.size,
     );
